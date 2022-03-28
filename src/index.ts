@@ -1,2 +1,6 @@
-import './scss/main.scss';
 
+import Invitation from './chapter1';
+
+const a = new Invitation(); 
+
+console.log(a);
