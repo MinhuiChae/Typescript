@@ -1,66 +1,64 @@
 import { setWith } from 'lodash';
 import {Invitation,Ticket,Bag,Audience,TicketOffice} from '../chapter1';
 
-// const a = new Invitation(); 
-// const b = new Ticket();
-// const c = new Bag();
-// const d = new Audience();
-// const e = new TicketOffice();
+interface ICircle {
+  width: number
+}
 
-// console.log(a);
-// console.log(b);
-// console.log(c);
-// console.log(d);
-// console.log(e);
+class Circle {
+  private Cwidth : ICircle;
 
-// interface Circle {
-//   width : number;
-// }
+  constructor(x:ICircle){
+    this.Cwidth = x;
+  }
 
-// class circle {
-//   private attrs : Circle;
-//   constructor(attrs: Circle) {
-//     this.attrs = attrs;
-//   }
-//   getW() : number {
-//     return (this.attrs.width * this.attrs.width) * 3.14;
-//   }
-
-//   setWidth(width:number){
-//     this.attrs.width = width;
-//   }
-// }
-
-// const x = 100;
-// const t = new circle({width : x} as Circle);
-
-// t.setWidth(50);
-
-// console.log(t.getW());
-
+  getCircle(): number {
+    return this.Cwidth.width * this.Cwidth.width * 3.14;
+  }
+}
 
 interface ISquare {
-  width : number;
+  width: number,
+  height: number
 }
 
 class Square {
   private attrs : ISquare;
 
-  constructor(attrs:ISquare){
+  constructor(attrs: ISquare){
     this.attrs = attrs;
   }
 
-  getS() : number {
-    return this.attrs.width * this.attrs.width;
-  }
-
-  setWidth(width:number) {
-    this.attrs.width = width;
+  getSquare(): number {
+    return this.attrs.width * this.attrs.height;
   }
 }
 
-let x = 10;
+interface ITriangle {
+  width: number,
+  height: number
+}
 
-const s = new Square({width : x} as ISquare);
-s.setWidth(5);
-console.log(s.getS());
+class Triangle {
+  private attrs : ITriangle;
+
+  constructor(attrs: ITriangle){
+    this.attrs = attrs;
+  }
+
+  getTriangle(): number {
+    return (this.attrs.width * this.attrs.height)/2;
+  }
+}
+
+const t = Number(document.getElementById(".width"));
+const t2 = Number(document.getElementById(".height"));
+
+const c = new Circle({width:t});
+const s = new Square({width:t,height:t2});
+const ti = new Triangle({width:t,height:t2});
+
+document.getElementById('.extend').innerText =String(c);
+console.log(s.getSquare());
+console.log(ti.getTriangle());
+
