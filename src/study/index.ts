@@ -80,7 +80,7 @@ btnc.addEventListener("click", (e:Event) => CPlus());
 let btns = document.querySelector('#square');
 btns.addEventListener("click", (e:Event) => SPlus());
 let btnt = document.querySelector('#triangle');
-btnc.addEventListener("click", (e:Event) => TPlus());
+btnt.addEventListener("click", (e:Event) => TPlus());
 
 
 
