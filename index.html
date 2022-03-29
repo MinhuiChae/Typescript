@@ -4,12 +4,62 @@
   </head>
   <body>
     <div>
-      <button type="button" id="circle">원</button>
-      <button type="button" id="triangle">삼각형</button>
-      <button type="button" id="square">사각형</button><br><br>
-        <div>길이:<input type="text" id="width"></div>
-        <div>높이:<input type="text" id="height"></div><br>
+      <button type="button" class='button' item-data ='circle'>원</button>
+      <button type="button" class='button' item-data ='triangle' >삼각형</button>
+      <button type="button" class='button' item-data ='square'>사각형</button><br><br>
+        <div>길이:<input type="text" id="width" value="5"></div>
+        <div>높이:<input type="text" id="height" value="5"></div><br>
+
+        <button type="button" onclick ='doWeight()'>넓이는</button>
         <div>넓이:<input type="text" id="extend" readonly></div>
     </div>
+    <script>
+      let shapeInfo = {
+        shape: '',
+        width: 0,
+        height: 0,
+      };
+      const itemList = document.getElementsByClassName('button');
+
+      const onClick = (self) => {
+        const itemData = self.getAttribute('item-data');
+        shapeInfo.shape = itemData;
+      };
+
+      function doWeight() {
+        let weight = 0;
+        const width = getShapeWidth()
+        const height = getShapeHeight();
+        setShapeWidthHeight(width, height);
+        weight = getWeightByShapeInfo();
+        displayWeight(weight);
+      }
+
+      const getShapeWidth = () => {
+        return document.getElementById('width').value;
+      }
+
+      const getShapeHeight = () => {
+        return document.getElementById('height').value;
+      }
+
+      const setShapeWidthHeight = (width, height) => {
+        shapeInfo.width = width;
+        shapeInfo.height = height;
+      }
+
+      const getWeightByShapeInfo = () => {    
+        return window.shapeModule.getWeight(shapeInfo);       
+      }
+
+      const displayWeight = (weight) => {
+        document.getElementById('extend').value = weight;
+      }
+
+      Array.from(itemList).map((item) => {
+        item.addEventListener('click', onClick.bind(this, item));
+      })
+     
+    </script>
   </body>
 </html>
