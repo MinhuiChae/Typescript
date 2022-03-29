@@ -51,14 +51,36 @@ class Triangle {
   }
 }
 
-const t = Number(document.getElementById(".width"));
-const t2 = Number(document.getElementById(".height"));
+var textElement = <HTMLInputElement>document.getElementById('width');
+var Helement = <HTMLInputElement>document.getElementById('height');
+var Welement = <HTMLInputElement>document.getElementById('extend');
 
-const c = new Circle({width:t});
-const s = new Square({width:t,height:t2});
-const ti = new Triangle({width:t,height:t2});
+function CPlus():void {
+  let t = Number(textElement.value);
+  const c = new Circle({width:t});
+  alert(c.getCircle());
+}
 
-document.getElementById('.extend').innerText =String(c);
-console.log(s.getSquare());
-console.log(ti.getTriangle());
+function TPlus():void {
+  let t = Number(textElement.value);
+  let t2 = Number(Helement.value);
+  const ti = new Triangle({width:t,height:t2});
+  alert(ti.getTriangle());
+}
+
+function SPlus():void {
+  let t = Number(textElement.value);
+  let t2 = Number(Helement.value);
+  const s = new Square({width:t,height:t2});
+  alert(s.getSquare());
+}
+
+let btnc = document.querySelector('#circle');
+btnc.addEventListener("click", (e:Event) => CPlus());
+let btns = document.querySelector('#square');
+btns.addEventListener("click", (e:Event) => SPlus());
+let btnt = document.querySelector('#triangle');
+btnc.addEventListener("click", (e:Event) => TPlus());
+
+
 
