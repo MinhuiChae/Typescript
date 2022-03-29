@@ -1,6 +1,5 @@
-
 import { setWith } from 'lodash';
-import {Invitation,Ticket,Bag,Audience,TicketOffice} from './chapter1';
+import {Invitation,Ticket,Bag,Audience,TicketOffice} from '../chapter1';
 
 // const a = new Invitation(); 
 // const b = new Ticket();
