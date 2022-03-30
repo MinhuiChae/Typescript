@@ -67,6 +67,5 @@ class TicketOffice{
 }
 
 
-
 export {Invitation, Ticket, Bag, Audience,TicketOffice}; 
 
