@@ -14,52 +14,52 @@
         <div>넓이:<input type="text" id="extend" readonly></div>
     </div>
     <script>
-      let shapeInfo = {
-        shape: '',
-        width: 0,
-        height: 0,
-      };
-      const itemList = document.getElementsByClassName('button');
+     let shapeInfo = {
+       shape: '',
+       width: 0,
+       height: 0,
+     };
 
-      const onClick = (self) => {
-        const itemData = self.getAttribute('item-data');
-        shapeInfo.shape = itemData;
-      };
+     const itemList = document.getElementsByClassName('button');
 
-      function doWeight() {
-        let weight = 0;
-        const width = getShapeWidth()
-        const height = getShapeHeight();
-        setShapeWidthHeight(width, height);
-        weight = getWeightByShapeInfo();
-        displayWeight(weight);
-      }
+     const onClick = (self) => {
+      const itemData = self.getAttribute('item-data');
+      shapeInfo.shape = itemData;
+     };
 
-      const getShapeWidth = () => {
-        return document.getElementById('width').value;
-      }
+     function doWeight() {
+       let weight = 0;
+       const width = getShapeWidth();
+       const height = getShapeHeight();
+       setShapeWidthHeight(width, height);
+       weight = getWeightByShapeInfo();
+       displayWeight(weight);
+     }
 
-      const getShapeHeight = () => {
-        return document.getElementById('height').value;
-      }
+     const getShapeWidth = () => {
+       return document.getElementById('width').value;
+     }
 
-      const setShapeWidthHeight = (width, height) => {
-        shapeInfo.width = width;
-        shapeInfo.height = height;
-      }
+     const getShapeHeight = () => {
+       return document.getElementById('height').value;
+     }
 
-      const getWeightByShapeInfo = () => {    
-        return window.shapeModule.getWeight(shapeInfo);       
-      }
+     const setShapeWidthHeight = (width, height) => {
+       shapeInfo.width = width;
+       shapeInfo.height= height;
+     }
 
-      const displayWeight = (weight) => {
-        document.getElementById('extend').value = weight;
-      }
-
-      Array.from(itemList).map((item) => {
-        item.addEventListener('click', onClick.bind(this, item));
-      })
+     const getWeightByShapeInfo = () => {
+       return window.shapeModule.getWeight(shapeInfo);
+     }
      
+     const displayWeight = (weight) => {
+       document.getElementById('extend').value = weight;
+     }
+
+     Array.from(itemList).map((item) => {
+       item.addEventListener('click', onClick.bind(this,item));
+     })
     </script>
   </body>
 </html>
