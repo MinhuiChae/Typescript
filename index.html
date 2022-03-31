@@ -4,64 +4,6 @@
   <title>Document</title>
 </head>
 <body>
-  <div>
-    <button type="button" class="button" item-data="circle">원</button>
-    <button type="button" class="button" item-data="triangle">삼각형</button>
-    <button type="button" class="button" item-data="square">사각형</button><br><br>
-    x: <input type="text" id="width"><br>
-    y: <input type="text" id="height"><br><br>
-    <button type="button" onclick="doWeight()">넓이</button>
-    <input type="text" id="extend" readonly>
-  </div>
-
-  <script>
-    let shapeInfo ={
-      shape: '',
-      width: 0,
-      height:0
-    }
-
-    const itemList = document.getElementsByClassName('button');
-
-    const onClick = (self) => {
-      const selfShape = self.getAttribute('item-Data');
-      shapeInfo.shape = selfShape;
-    }
-
-    function doWeight() {
-      let weight = 0;
-      const width = getWidth();
-      const height = getHeight();
-      setWidthHeight(width, height);
-      weight = getweights();
-      displayWeight(weight);
-
-    }
-
-    const getWidth = () => {
-      return document.getElementById('width').value;
-    }
-
-    const getHeight = () => {
-      return document.getElementById('height').value;
-    }
-
-    const setWidthHeight = (width, height) => {
-      shapeInfo.width = width;
-      shapeInfo.height = height;
-    }
-
-    const getweights = () => {
-      return window.shapeModule.getWeight(shapeInfo);
-    }
-
-    const displayWeight = (weight) => {
-      document.getElementById('extend').value = weight;
-    }
-
-    Array.from(itemList).map((item)=> {
-      item.addEventListener('click', onClick.bind(this, item));
-    })
-  </script>
+  <div></div>
 </body>
 </html>
