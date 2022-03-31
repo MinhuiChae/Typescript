@@ -1,84 +1,90 @@
-interface Window {
-  shapeModule : any
-}
+// interface Window {
+//   shapeModule : any;
+// }
 
-interface IWidthHeight {
-  width: number,
-  height: number
-}
+// interface IWidthHeight {
+//   width: number,
+//   height: number
+// }
 
-interface IShapeWidthHeight extends IWidthHeight{
-  shape: string;
-}
+// interface IShapeWidthHeight extends IWidthHeight{
+//   shape: string
+// }
 
-abstract class Shape {
-  width: number;
-  height: number;
+// abstract class Shape {
+//   width: number;
+//   height: number;
 
-  constructor(info: IWidthHeight) {
-    this.width = info.width;
-    this.height = info.height;
-  }
+//   constructor(info: IShapeWidthHeight) {
+//     this.width = info.width;
+//     this.height = info.height;
+//   }
 
-  abstract getWeight(): number;
-}
+//   abstract getWeight(): number;
+// } 
 
-class SetCircleWeight extends Shape {
-  constructor(info: IWidthHeight) {
-    super(info);
-  }
+// class getCircleWeight extends Shape{
+//   constructor(info: IShapeWidthHeight) {
+//     super(info);
+//   }
 
-  getWeight(): number {
-    return this.width * this.width * 3.14;
-  }
-}
+//   getWeight(): number {
+//     return this.width * this.width * 3.14;
+//   }
+// }
 
-class SetTriangleWeight extends Shape {
-  constructor(info: IWidthHeight) {
-    super(info);
-  }
+// class getTriangleWeight extends Shape{
+//   constructor(info: IShapeWidthHeight) {
+//     super(info);
+//   }
 
-  getWeight(): number {
-    return (this.width * this.height)/2;
-  }
-}
+//   getWeight(): number {
+//     return (this.width * this.height)/2;
+//   }
+// }
 
-class SetSquareWeight extends Shape {
+// class getSquareWeight extends Shape{
+//   constructor(info: IShapeWidthHeight) {
+//     super(info);
+//   }
 
-  constructor(info: IWidthHeight) {
-    super(info);
-  }
-  getWeight(): number {
-    return this.width * this.height;
-  }
-}
+//   getWeight(): number {
+//     return this.width * this.height;
+//   }
+// }
 
-class shapeModuleFactory {
-  shapeModuleInstance : Shape;
+// class ShapeModuleFactory {
+//   shapeInfo : Shape;
 
-  constructor(info: IShapeWidthHeight) {
-    if(info.shape == 'circle') {
-      this.shapeModuleInstance = new SetCircleWeight(info);
-    }else if(info.shape == 'triangle') {
-      this.shapeModuleInstance = new SetTriangleWeight(info);
-    }if(info.shape == 'square') {
-      this.shapeModuleInstance = new SetSquareWeight(info);
-    }
-  }
+//   constructor(info: IShapeWidthHeight) {
+//     if(info.shape == 'circle') {
+//       this.shapeInfo = new getCircleWeight(info);
+//     }else if(info.shape == 'triangle') {
+//       this.shapeInfo = new getTriangleWeight(info);
+//     }else if(info.shape == 'square') {
+//       this.shapeInfo = new getSquareWeight(info);
+//     }
+//   }
 
-  getWeight(): number{
-    return this.shapeModuleInstance.getWeight();
-  }
-}
+//   getWeight(): number {
+//     return this.shapeInfo.getWeight();
+//   }
+// }
 
-((w: Window) => {
-  const shapeModuleController = {
-    getWeight: (info: IShapeWidthHeight) => {
-      return new shapeModuleFactory(info).getWeight();
-    }
-  }
-  
-  w.shapeModule = shapeModuleController;
+// ((w: Window) => {
+//   const getShapeController = {
+//     getWeight: (info: IShapeWidthHeight) => {
+//       return new ShapeModuleFactory(info).getWeight();
+//     }
+//   }
 
-})(window)
+//   w.shapeModule = getShapeController;
+// })(window)
 
+
+import {Invitation,Ticket,Bag,Audience,TicketOffice} from '../chapter1';
+
+
+const a = new Invitation();
+
+console.log(a);

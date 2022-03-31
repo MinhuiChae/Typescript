@@ -10,10 +10,10 @@ class Ticket{
   }
 }
 
-class Bag{
-  private amount: number =0;
-  private invitation: boolean=true;
-  private ticket: number =0;
+class Bag {
+  private amount: number =0 ;
+  private invitation: boolean = true;
+  private ticket: number = 0;
 
   hasInvitation(): boolean {
     return true;
@@ -23,43 +23,43 @@ class Bag{
     return true;
   }
 
-  setTicket(ticket:any):void{
+  setTicket(ticket: any): void {
     this.ticket = ticket;
   }
 
-  minusAmount(amount:number):void{
-    this.amount-=amount;
+  minusAmount(amount: number): void {
+    this.amount -= amount;
   }
 
-  plusAmount(amount:number):void{
-    this.amount+=amount;
+  plusAmount(amount: number): void {
+    this.amount += amount;
   }
 
-  Bag(amount:number,invitation?:boolean){
+  Bag(amount: number, invitation?: boolean) {
     this.invitation = invitation;
     this.amount = amount;
   }
 
 }
 
-class Audience{
-  private bag:Bag;
+class Audience {
+  private bag: Bag;
 
-  Audience(bag:Bag){
+  Audience(bag: Bag) {
     this.bag = bag;
   }
 
-  getBag(): Bag{
+  getBag(): Bag {
     return this.bag;
   }
 }
 
 
-class TicketOffice{
+class TicketOffice {
   private amount: number = 0;
   private ticket: object[] = [];
 
-  TicketOffice(amount: number, ticket: object[]){
+  TicketOffice(amount: number, ticket: object[]) {
     this.amount = amount;
     this.ticket = ticket;
   }
