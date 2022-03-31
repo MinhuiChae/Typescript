@@ -27,5 +27,8 @@
 import {Invitation,Ticket,Bag,Audience,TicketOffice} from '../chapter1';
 
 const a = new Invitation(); 
+const b = new Ticket();
+const c = new Bag();
+const d = new Audience();
+const e = new TicketOffice();
 
-console.log(a);

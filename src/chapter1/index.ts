@@ -23,7 +23,7 @@ class Bag{
     return true;
   }
 
-  setTicket(ticket:number):void{
+  setTicket(ticket:any):void{
     this.ticket = ticket;
   }
 
@@ -43,13 +43,13 @@ class Bag{
 }
 
 class Audience{
-  private bag:object;
+  private bag:Bag;
 
-  Audience(bag:object){
+  Audience(bag:Bag){
     this.bag=bag;
   }
 
-  getBag():object{
+  getBag(): Bag{
     return this.bag;
   }
 }
@@ -62,10 +62,53 @@ class TicketOffice{
   TicketOffice(amount:number, ticket:object[]){
     this.amount=amount;
     this.ticket = ticket;
-    
+  }
+
+  getTicket():any {
+    return this.ticket.shift();
+  }
+
+  minusAmount(amount: number): void {
+    this.amount -= amount;
+  }
+
+  plusAmount(amount: number): void{
+    this.amount += amount;
   }
 }
 
+class TicketSeller {
+  private ticketOffice: any;
+
+  ticketSeller(ticketOffice: object) {
+    this.ticketOffice = ticketOffice;
+  }
+
+  getTicketOffice() {
+    return this.ticketOffice;
+  }
+  
+}
+
+class Theater {
+  private ticketSeller: TicketSeller;
+
+  constructor(ticketSeller: TicketSeller) {
+    this.ticketSeller = ticketSeller;
+  }
+
+  public enter(audience: Audience): void {
+    if (audience.getBag().hasInvitation()) {
+      const ticket: Ticket = this.ticketSeller.getTicketOffice().getTicket();
+      audience.getBag().setTicket(ticket);
+    } else {
+      const ticket: Ticket = this.ticketSeller.getTicketOffice().getTicket();
+      audience.getBag().minusAmount(ticket.getFee());
+      this.ticketSeller.getTicketOffice().plusAmount(ticket.getFee());
+      audience.getBag().setTicket(ticket);
+    }
+  }
+}
 
 export {Invitation, Ticket, Bag, Audience,TicketOffice}; 
 

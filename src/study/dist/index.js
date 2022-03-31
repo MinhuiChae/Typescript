@@ -24,4 +24,7 @@ exports.__esModule = true;
 // })(window)
 var chapter1_1 = require("../chapter1");
 var a = new chapter1_1.Invitation();
-console.log(a);
+var b = new chapter1_1.Ticket();
+var c = new chapter1_1.Bag();
+var d = new chapter1_1.Audience();
+var e = new chapter1_1.TicketOffice();

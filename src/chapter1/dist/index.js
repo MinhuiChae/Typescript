@@ -67,6 +67,44 @@ var TicketOffice = /** @class */ (function () {
         this.amount = amount;
         this.ticket = ticket;
     };
+    TicketOffice.prototype.getTicket = function () {
+        return this.ticket.shift();
+    };
+    TicketOffice.prototype.minusAmount = function (amount) {
+        this.amount -= amount;
+    };
+    TicketOffice.prototype.plusAmount = function (amount) {
+        this.amount += amount;
+    };
     return TicketOffice;
 }());
 exports.TicketOffice = TicketOffice;
+var TicketSeller = /** @class */ (function () {
+    function TicketSeller() {
+    }
+    TicketSeller.prototype.ticketSeller = function (ticketOffice) {
+        this.ticketOffice = ticketOffice;
+    };
+    TicketSeller.prototype.getTicketOffice = function () {
+        return this.ticketOffice;
+    };
+    return TicketSeller;
+}());
+var Theater = /** @class */ (function () {
+    function Theater(ticketSeller) {
+        this.ticketSeller = ticketSeller;
+    }
+    Theater.prototype.enter = function (audience) {
+        if (audience.getBag().hasInvitation()) {
+            var ticket = this.ticketSeller.getTicketOffice().getTicket();
+            audience.getBag().setTicket(ticket);
+        }
+        else {
+            var ticket = this.ticketSeller.getTicketOffice().getTicket();
+            audience.getBag().minusAmount(ticket.getFee());
+            this.ticketSeller.getTicketOffice().plusAmount(ticket.getFee());
+            audience.getBag().setTicket(ticket);
+        }
+    };
+    return Theater;
+}());
