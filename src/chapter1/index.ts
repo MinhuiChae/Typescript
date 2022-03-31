@@ -11,15 +11,15 @@ class Ticket{
 }
 
 class Bag{
-  private amount:number =0;
-  private invitation:boolean=true;
-  private ticket:number =0;
+  private amount: number =0;
+  private invitation: boolean=true;
+  private ticket: number =0;
 
-  hasInvitation():boolean {
+  hasInvitation(): boolean {
     return true;
   }
 
-  hasTicket():boolean {
+  hasTicket(): boolean {
     return true;
   }
 
@@ -46,7 +46,7 @@ class Audience{
   private bag:Bag;
 
   Audience(bag:Bag){
-    this.bag=bag;
+    this.bag = bag;
   }
 
   getBag(): Bag{
@@ -56,11 +56,11 @@ class Audience{
 
 
 class TicketOffice{
-  private amount:number = 0;
-  private ticket:object[]=[];
+  private amount: number = 0;
+  private ticket: object[] = [];
 
-  TicketOffice(amount:number, ticket:object[]){
-    this.amount=amount;
+  TicketOffice(amount: number, ticket: object[]){
+    this.amount = amount;
     this.ticket = ticket;
   }
 
@@ -109,6 +109,7 @@ class Theater {
     }
   }
 }
+
 
 export {Invitation, Ticket, Bag, Audience,TicketOffice}; 
 
