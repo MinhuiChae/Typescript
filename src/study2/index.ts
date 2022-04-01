@@ -22,8 +22,10 @@ abstract class IFruitInfo {
     this.price = price;
   }
 
+  abstract getPriceRatioByColor(): number;
+
   calFruit(): number {
-    return this.amount * this.price;
+    return this.amount * this.getPriceRatioByColor();
   };
 }
 
@@ -34,11 +36,17 @@ class Apple extends IFruitInfo {
     this.setPrice(this.applePrice);
   }  
 
+  getPriceRatioByColor(): number {
+    if (this.color === 'red') {
+      return 1;
+    } else if (this.color === 'orange') {
+      return 1.5;
+    } else if (this.color === 'yellow') {
+      return 2;
+    } 
+  }
 }
 
-class PriceRatioByColor {
-  
-}
 
 // class Pear extends IFruitInfo {
 //   pearPrice : number = 2000;
