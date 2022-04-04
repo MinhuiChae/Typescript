@@ -123,3 +123,10 @@
 
 // console.log(a);
 
+
+//3번 문제 : 신규회원추천
+
+function solution(new_id: string) {
+  var answer = '';
+  return answer;
+}
