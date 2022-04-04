@@ -85,43 +85,80 @@ import { result, values } from "lodash";
 //  오브젝트 배열
 // 클래서 배열
 
-class A {
-  color: string;
-  price: number;
-  constructor(color: string, price: number){
-    this.color = color;
-    this.price = price;
+// class A {
+//   color: string;
+//   price: number;
+//   constructor(color: string, price: number){
+//     this.color = color;
+//     this.price = price;
+//   }
+// }
+
+// const arr2 =[
+//   new A('red', 1000),
+//   new A('orange', 2000),
+//   new A('yellow', 3000),
+// ]
+
+
+// let aa = arr2.find((element: A) => {
+//   return element.color === 'yellow';
+// })
+
+
+
+// const aaaa = (color: string) => {
+//   // let aColor = arr2.find((element: A) => {
+//   //   element.color = color; //element의 color 에 aaaa 함수 매개변수인 color을 대입
+//   //   return color === 'yellow';//color가 yellow인 것을 리턴
+//   // })
+
+//   // arr2[0].color === color
+//   // arr2[1].color === color
+//   // arr2[2].color === color
+
+//   // for(let i = 0; i<= arr2.length-1; i++) {
+//   //   if(arr2[i].color === color) {
+//   //     console.log(arr2[i]);
+//   //   }
+//   // }
+
+//   let b: A | undefined = arr2.find((element: A) => {
+//     return element.color === color;
+//   });
+
+//  return b;
+// }
+
+// const a = 1;
+
+// console.log(aaaa('yellow'));
+
+// const arr = [
+//   {color: 'red', price : 1000}, 
+//   {color: 'orange', price : 2000},
+//   {color: 'yellow', price: 3000}
+// ];
+
+// function color(element: any)  {
+//   if(element.color === 'red')  {
+//     return true;
+//   }
+// }
+
+// const aaa = arr.find(color);
+
+let arr: number[] = [];  // 
+
+for(let i= 1; i<=9; i++) {
+  arr[i] = i; //1 
+  for(let j= 1; j<=9; j++) {    
+    arr[j] = j; //2
+   // console.log(arr[i] * arr[j]);
+   console.log(`${i} * ${j} `,i * j);
   }
 }
 
-const arr2 =[
-  new A('red', 1000),
-  new A('orange', 2000),
-  new A('yellow', 3000),
-]
-
-
-let aa = arr2.find((element: any) => {
-  return element = 'red';
-})
-
-
-
-console.log(aa);
-
-const arr = [
-  {color: 'red', price : 1000}, 
-  {color: 'orange', price : 2000},
-  {color: 'yellow', price: 3000}
-];
-
-function color(element: any)  {
-  if(element.color === 'red')  {
-    return true;
-  }
-}
-
-const aaa = arr.find(color);
 // console.log(aaa);
 
 
