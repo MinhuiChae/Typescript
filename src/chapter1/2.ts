@@ -43,3 +43,20 @@ class Audience2 {
       }
   }
 }
+
+//이제 TicketSeller 가 Audience 인터페이스에만 의존하도록 수정함
+
+class TicketSeller4 {
+  private ticketOffice: TicketOffice;
+
+    constructor(ticketOffice: TicketOffice) {
+      this.ticketOffice = ticketOffice;
+    }
+    sellTo(audience: Audience) {
+      this.ticketOffice.plusAmount(audience.buy(this.ticketOffice.getTicket()));
+    }
+}
+
+//수정 결과 TicketSeller 와 Audience 사이의 결합도가 낮아짐 Audience와 TicketSeller가 자신의 문제를 스스로 책임지고 해결하고 있다는 뜻
+
+//Audience와 TicketSeller의 내부 구현을 변경하더라도 Theater를 함께 변경할 필요가 없어짐.
