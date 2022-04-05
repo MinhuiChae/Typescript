@@ -3,11 +3,11 @@ interface IAmount {
 }
 
 class Invitation {
-  when: number;
+  when: number = 0;
 }
 
-class Ticket{
-  fee: number;
+class Ticket {
+  fee: number = 0;
   
   getFee():number {
     return this.fee;
@@ -15,11 +15,11 @@ class Ticket{
 }
 
 class Bag {
-  amount: IAmount;
-  invitation: Invitation;
-  ticket: Ticket;
+  amount: number = 0;
+  invitation: Invitation | null = null;
+  ticket: Ticket | null = null;
 
-  a(av: any) {
+  a(av: number) {
     this.amount = av;
   }
 
@@ -36,11 +36,11 @@ class Bag {
   }
 
   minusAmount(amount: number) {
-    this.amount.amount -= amount;
+    this.amount -= amount;
   }
 
   plusAmount(amount: number) {
-    this.amount.amount += amount;
+    this.amount += amount;
   }
 
   hold(ticket: Ticket): number {
@@ -68,25 +68,30 @@ class Audience {
 
 
 class TicketOffice {
-  amount: IAmount;
+  amount: number | null = null;
   tickets: Ticket[] = new Array();
 
-  TicketOffice(amount: any, ...ticket: any[]) {
+  TicketOffice(amount: number, ticket: Ticket[]) {
     this.amount = amount;
-    this.tickets = Array.from(new Set(...ticket)).map((a: Ticket) =>a);
+    this.tickets = ticket;
   }
 
   plusAmount(amount: number) {
-    this.amount.amount += amount;
+    if (this.amount) {
+      this.amount += amount;
+    }
   }
   
 
-  getTicket(): Ticket {
+  getTicket(): Ticket | undefined {
     return this.tickets.shift();
   }
 
   sellTicketTo(audience: Audience) {
-    this.plusAmount(audience.buy(this.getTicket()));
+    const ticket = this.getTicket();
+    if (ticket) {
+      this.plusAmount(audience.buy(ticket));
+    }
   }
 
 }
