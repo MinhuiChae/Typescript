@@ -33,4 +33,13 @@ class Audience2 {
   // getBag(): Bag {
   //   return this.bag;
   // } Audience는 자신의 가방 안의 초대장을 스스로 확인하기 때문에 외부에서 Audience가 Bag을 소유하고 있다는 사실을 알 필요 없음
+
+  buy(ticket: Ticket) {
+    if(this.bag.hasInvitation()) {
+      this.bag.setTicket(ticket);
+      } else {
+        this.bag.minusAmount(ticket.getFee());
+        return ticket.getFee();
+      }
+  }
 }
