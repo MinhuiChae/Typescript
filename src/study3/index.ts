@@ -24,7 +24,7 @@
 // console.log(ab);
 
 
-//2번 문제 : 로또당첨
+// 2번 문제 : 로또당첨
 
 // function solution(lottos: number[], win_nums: number[]) {
 //   let list = new Array();
@@ -124,9 +124,5 @@
 // console.log(a);
 
 
-//3번 문제 : 신규회원추천
+//3번문제 : 숫자 문자열과 영단어
 
-function solution(new_id: string) {
-  var answer = '';
-  return answer;
-}
