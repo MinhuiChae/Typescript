@@ -1,9 +1,16 @@
 class Invitation {
   when: number = 0;
+  constructor(when: number) {
+    this.when = when;
+  }
 }
 
 class Ticket {
   fee: number = 0;
+
+  constructor(fee: number) {
+    this.fee = fee;
+  }
   
   getFee():number {
     return this.fee;
@@ -20,8 +27,8 @@ class Bag {
   invitation?: Invitation | null = null;
   ticket: Ticket | null = null;
 
-  constructor(attr: IBag) {
-    this.amount = attr.amount;
+  constructor(attr: IBag) { 
+    this.amount = attr.amount ?? 0;
     this.invitation = attr.invitation;
   }
 
@@ -74,17 +81,17 @@ class Audience {
 
 
 class TicketOffice {
-  amount: number | null = null;
+  sellTotalPrice: number | null = null;
   tickets: Ticket[] = new Array();
 
-  TicketOffice(amount: number, ticket: Ticket[]) {
-    this.amount = amount;
+  constructor(sellTotalPrice: number, ticket: Ticket[]) {
+    this.sellTotalPrice = sellTotalPrice;
     this.tickets = ticket;
   }
 
-  plusAmount(amount: number) {
-    if (this.amount != null) {
-      this.amount += amount;
+  plusAmount(price: number) {
+    if (this.sellTotalPrice != null) {
+      this.sellTotalPrice += price;
     }
   }  
 
@@ -102,13 +109,44 @@ class TicketOffice {
 
 class TicketSeller {
   private ticketOffice: TicketOffice;
+  private msg: string = "";
 
   constructor(ticketOffice: TicketOffice) {
     this.ticketOffice = ticketOffice;
   }
 
-  sellTo(audience: Audience) {
-    this.ticketOffice.sellTicketTo(audience);
+  sellTo(audience: Audience): boolean {
+    if(this.isEmptyTicket()) {
+      this.msg = "티켓이 없습니다.";
+      return false;
+    }else if(this.isRightAudience(audience) == false) {
+      this.msg = "돈이 없습니다."
+      return false;
+    }else {
+      this.ticketOffice.sellTicketTo(audience);
+      this.msg = "구매가 완료되었습니다"
+      return true;
+    }
+  }
+  
+  getMsg(): string{
+    return this.msg;
+  }
+
+  isEmptyTicket(): boolean {
+    return this.ticketOffice.tickets.length === 0;
+  }
+
+  getFeeTicket(): number {
+    return this.ticketOffice.tickets[0]?.getFee();
+  }
+  
+  isRightAudience(audience: Audience): boolean {
+    return this.getFeeTicket() < (audience.bag.amount ?? 0) || audience.bag.hasInvitation();
+  }
+  
+  isSellTicket(audience: Audience): boolean {
+    return this.isRightAudience(audience) && this.isEmptyTicket();
   }
 }
 
