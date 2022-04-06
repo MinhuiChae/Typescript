@@ -105,9 +105,9 @@ class TicketSeller4 {
     constructor(ticketOffice: TicketOffice) {
       this.ticketOffice = ticketOffice;
     }
-    sellTo(audience: Audience) {
-      this.ticketOffice.plusAmount(audience.buy(this.ticketOffice.getTicket()));
-    }
+    // sellTo(audience: Audience6) {
+    //   this.ticketOffice.plusAmount(audience.buy(this.ticketOffice.getTicket()));
+    // }
 }
 
 class Audience4 {

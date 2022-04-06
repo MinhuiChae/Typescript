@@ -47,9 +47,6 @@ class Bag {
 }
 
 class Audience {
-  buy(arg0: Ticket | undefined): number {
-    throw new Error("Method not implemented.");
-  }
   bag: Bag;
 
   constructor(bag: Bag) {

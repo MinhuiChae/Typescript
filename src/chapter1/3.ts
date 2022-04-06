@@ -139,9 +139,9 @@ class Bag6 {
 
 //Audience 수정 전
 class Audience5 {
-  bag: Bag;
+  bag: Bag3;
 
-  constructor(bag: Bag) {
+  constructor(bag: Bag3) {
     this.bag = bag;
   }
 
@@ -158,7 +158,7 @@ class Audience5 {
 //Audience 수정 
 
 class Audience6 {
-  bag: Bag2;
+  bag: Bag6;
 
   constructor(bag: Bag2) {
     this.bag = bag;
@@ -250,7 +250,7 @@ class  TicketOffice11 {
     return this.tickets.shift();
   }
   //추가 시작
-  sellTicketTo(audience: Audience) {
+  sellTicketTo(audience: Audience6) {
     const ticket = this.getTicket();
     if (ticket) {
       this.plusAmount(audience.buy(ticket));
@@ -279,7 +279,7 @@ class TicketOffice9 {
     return this.tickets.shift();
   }
 
-  sellTicketTo(audience: Audience) {
+  sellTicketTo(audience: Audience6) {
     const ticket = this.getTicket();
     if (ticket) {
       this.plusAmount(audience.buy(ticket));
@@ -295,8 +295,8 @@ class TicketSeller8 {
     constructor(ticketOffice: TicketOffice) {
       this.ticketOffice = ticketOffice;
     }
-    sellTo(audience: Audience) {
-      this.ticketOffice.plusAmount(audience.buy(this.ticketOffice.getTicket()));
+    sellTo(audience: Audience6) {
+      // this.ticketOffice.plusAmount(audience.buy(this.ticketOffice.getTicket()));
     }
 }
 
@@ -308,9 +308,9 @@ class TicketSeller10 {
     constructor(ticketOffice: TicketOffice9) {
       this.ticketOffice = ticketOffice;
     }
-    sellTo(audience: Audience) {
+    sellTo(audience: Audience6) {
       //제거 시작
-      this.ticketOffice.plusAmount(audience.buy(this.ticketOffice.getTicket()));
+      // this.ticketOffice.plusAmount(audience.buy(this.ticketOffice.getTicket()));
       //제거 끝
       //추가 시작
       this.ticketOffice.sellTicketTo(audience);
@@ -329,7 +329,7 @@ class TicketSeller5 {
     this.ticketOffice = ticketOffice;
   }
 
-  sellTo(audience: Audience) {
+  sellTo(audience: Audience6) {
     this.ticketOffice.sellTicketTo(audience);
   }
 }
