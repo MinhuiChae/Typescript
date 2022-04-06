@@ -11,13 +11,13 @@ class Ticket {
 }
 
 class Bag {
-  amount: number = 0;
-  invitation: Invitation | null = null;
+  amount?: number = 0;
+  invitation?: Invitation | null = null;
   ticket: Ticket | null = null;
 
-  constructor(invitation: Invitation, amount: number) {
-    this.invitation = invitation;
-    this.amount = amount;
+  constructor(amount?: number, invitation?: Invitation) {
+      this.invitation = invitation ;
+      this.amount = amount;
   }
 
   a(av: number) {
@@ -37,11 +37,15 @@ class Bag {
   }
 
   minusAmount(amount: number) {
-    this.amount -= amount;
+    if(this.amount != null) {
+      this.amount -= amount;
+    }
   }
 
   plusAmount(amount: number) {
-    this.amount += amount;
+    if(this.amount != null) {
+      this.amount += amount;
+    }
   }
 
   hold(ticket: Ticket): number {
