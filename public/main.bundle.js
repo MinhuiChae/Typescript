@@ -3,43 +3,39 @@
 /******/ 	var __webpack_modules__ = ([
 /* 0 */,
 /* 1 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports) => {
 
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Audience": () => (/* binding */ Audience),
-/* harmony export */   "Bag": () => (/* binding */ Bag),
-/* harmony export */   "Invitation": () => (/* binding */ Invitation),
-/* harmony export */   "Theater": () => (/* binding */ Theater),
-/* harmony export */   "Ticket": () => (/* binding */ Ticket),
-/* harmony export */   "TicketOffice": () => (/* binding */ TicketOffice),
-/* harmony export */   "TicketSeller": () => (/* binding */ TicketSeller)
-/* harmony export */ });
-var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Theater = exports.TicketSeller = exports.TicketOffice = exports.Audience = exports.Bag = exports.Ticket = exports.Invitation = void 0;
 var Invitation = /** @class */ (function () {
     function Invitation() {
+        this.when = 0;
     }
     return Invitation;
 }());
+exports.Invitation = Invitation;
 var Ticket = /** @class */ (function () {
     function Ticket() {
+        this.fee = 0;
     }
     Ticket.prototype.getFee = function () {
         return this.fee;
     };
     return Ticket;
 }());
+exports.Ticket = Ticket;
 var Bag = /** @class */ (function () {
-    function Bag() {
+    function Bag(invitation, amount) {
+        this.amount = 0;
+        this.invitation = null;
+        this.ticket = null;
+        this.invitation = invitation;
+        this.amount = amount;
     }
+    Bag.prototype.a = function (av) {
+        this.amount = av;
+    };
     Bag.prototype.hasInvitation = function () {
         return this.invitation !== undefined;
     };
@@ -50,10 +46,10 @@ var Bag = /** @class */ (function () {
         this.ticket = ticket;
     };
     Bag.prototype.minusAmount = function (amount) {
-        this.amount.amount -= amount;
+        this.amount -= amount;
     };
     Bag.prototype.plusAmount = function (amount) {
-        this.amount.amount += amount;
+        this.amount += amount;
     };
     Bag.prototype.hold = function (ticket) {
         if (this.hasInvitation()) {
@@ -66,6 +62,7 @@ var Bag = /** @class */ (function () {
     };
     return Bag;
 }());
+exports.Bag = Bag;
 var Audience = /** @class */ (function () {
     function Audience(bag) {
         this.bag = bag;
@@ -75,29 +72,33 @@ var Audience = /** @class */ (function () {
     };
     return Audience;
 }());
+exports.Audience = Audience;
 var TicketOffice = /** @class */ (function () {
     function TicketOffice() {
+        this.amount = null;
         this.tickets = new Array();
     }
-    TicketOffice.prototype.plusAmount = function (amount) {
-        this.amount.amount += amount;
-    };
-    TicketOffice.prototype.TicketOffice = function (amount) {
-        var ticket = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            ticket[_i - 1] = arguments[_i];
-        }
+    TicketOffice.prototype.TicketOffice = function (amount, ticket) {
         this.amount = amount;
-        this.tickets = Array.from(new (Set.bind.apply(Set, __spreadArray([void 0], ticket, false)))()).map(function (a) { return a; });
+        this.tickets = ticket;
+    };
+    TicketOffice.prototype.plusAmount = function (amount) {
+        if (this.amount) {
+            this.amount += amount;
+        }
     };
     TicketOffice.prototype.getTicket = function () {
         return this.tickets.shift();
     };
     TicketOffice.prototype.sellTicketTo = function (audience) {
-        this.plusAmount(audience.buy(this.getTicket()));
+        var ticket = this.getTicket();
+        if (ticket) {
+            this.plusAmount(audience.buy(ticket));
+        }
     };
     return TicketOffice;
 }());
+exports.TicketOffice = TicketOffice;
 var TicketSeller = /** @class */ (function () {
     function TicketSeller(ticketOffice) {
         this.ticketOffice = ticketOffice;
@@ -107,6 +108,7 @@ var TicketSeller = /** @class */ (function () {
     };
     return TicketSeller;
 }());
+exports.TicketSeller = TicketSeller;
 var Theater = /** @class */ (function () {
     function Theater(ticketSeller) {
         this.ticketSeller = ticketSeller;
@@ -116,7 +118,7 @@ var Theater = /** @class */ (function () {
     };
     return Theater;
 }());
-
+exports.Theater = Theater;
 
 
 /***/ })
@@ -147,53 +149,27 @@ var Theater = /** @class */ (function () {
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _src_chapter1_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+var exports = __webpack_exports__;
 
-var a = new _src_chapter1_index__WEBPACK_IMPORTED_MODULE_0__.TicketOffice();
-var b = new _src_chapter1_index__WEBPACK_IMPORTED_MODULE_0__.Invitation();
-var c = new _src_chapter1_index__WEBPACK_IMPORTED_MODULE_0__.Ticket();
-var d = new _src_chapter1_index__WEBPACK_IMPORTED_MODULE_0__.Bag();
-var e = new _src_chapter1_index__WEBPACK_IMPORTED_MODULE_0__.Audience(d);
-var f = new _src_chapter1_index__WEBPACK_IMPORTED_MODULE_0__.TicketSeller(a);
-var g = new _src_chapter1_index__WEBPACK_IMPORTED_MODULE_0__.Theater(f);
-a.TicketOffice({ amount: 6 }, [1, 2, 3, 4]);
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+var final_1 = __webpack_require__(1);
+var a = new final_1.TicketOffice();
+var b = new final_1.Invitation();
+var c = new final_1.Ticket();
+var d = new final_1.Bag(b, 5000);
+var e = new final_1.Audience(d);
+var f = new final_1.TicketSeller(a);
+var g = new final_1.Theater(f);
+var t1 = new final_1.Ticket();
+a.TicketOffice(0, [t1]); //
 a.getTicket();
 a.plusAmount(4);
-a.sellTicketTo(e);
-console.log(5);
+c.getFee();
+d.minusAmount(2);
+console.log(d.amount);
 
 })();
 

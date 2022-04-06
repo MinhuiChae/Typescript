@@ -1,7 +1,3 @@
-interface IAmount {
-  amount: number;
-}
-
 class Invitation {
   when: number = 0;
 }
@@ -18,6 +14,11 @@ class Bag {
   amount: number = 0;
   invitation: Invitation | null = null;
   ticket: Ticket | null = null;
+
+  constructor(invitation: Invitation, amount: number) {
+    this.invitation = invitation;
+    this.amount = amount;
+  }
 
   a(av: number) {
     this.amount = av;
@@ -80,8 +81,7 @@ class TicketOffice {
     if (this.amount) {
       this.amount += amount;
     }
-  }
-  
+  }  
 
   getTicket(): Ticket | undefined {
     return this.tickets.shift();
@@ -93,7 +93,6 @@ class TicketOffice {
       this.plusAmount(audience.buy(ticket));
     }
   }
-
 }
 
 class TicketSeller {
@@ -120,7 +119,5 @@ class Theater {
   }
 }
 
-
-
-  export {Invitation, Ticket, Bag, Audience, TicketOffice, TicketSeller, Theater}; 
+export {Invitation, Ticket, Bag, Audience, TicketOffice, TicketSeller, Theater}; 
 
