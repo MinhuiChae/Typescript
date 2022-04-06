@@ -20,10 +20,6 @@ class Bag {
       this.amount = amount;
   }
 
-  a(av: number) {
-    this.amount = av;
-  }
-
   hasInvitation(): boolean {
     return this.invitation !== undefined;
   }
@@ -82,7 +78,7 @@ class TicketOffice {
   }
 
   plusAmount(amount: number) {
-    if (this.amount) {
+    if (this.amount != null) {
       this.amount += amount;
     }
   }  
