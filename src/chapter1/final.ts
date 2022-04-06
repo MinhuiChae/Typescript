@@ -10,14 +10,19 @@ class Ticket {
   }
 }
 
+interface IBag {
+  amount?: number,
+  invitation?: Invitation
+}
+
 class Bag {
   amount?: number = 0;
   invitation?: Invitation | null = null;
   ticket: Ticket | null = null;
 
-  constructor(amount?: number, invitation?: Invitation) {
-      this.invitation = invitation ;
-      this.amount = amount;
+  constructor(attr: IBag) {
+    this.amount = attr.amount;
+    this.invitation = attr.invitation;
   }
 
   hasInvitation(): boolean {
@@ -49,9 +54,9 @@ class Bag {
       this.setTicket(ticket);
       return 0;
     }
-    this.setTicket(ticket);
-    this.minusAmount(ticket.getFee());
-    return ticket.getFee();
+      this.setTicket(ticket);
+      this.minusAmount(ticket.getFee());
+      return ticket.getFee();
   }
 }
 
