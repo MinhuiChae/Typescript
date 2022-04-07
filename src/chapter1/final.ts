@@ -144,10 +144,6 @@ class TicketSeller {
   isRightAudience(audience: Audience): boolean {
     return this.getFeeTicket() < (audience.bag.amount ?? 0) || audience.bag.hasInvitation();
   }
-  
-  isSellTicket(audience: Audience): boolean {
-    return this.isRightAudience(audience) && this.isEmptyTicket();
-  }
 }
 
 class Theater {

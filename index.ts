@@ -7,7 +7,6 @@ const ticket2 = new Ticket(2000); // 알라딘
 const bag1 = new Bag({amount:10000});
 const bag2 = new Bag({amount: 10000, invitation: invitation});
 const bag3 = new Bag({invitation: invitation});
-
 const bag4 = new Bag({amount:0});
 
 const audience1 = new Audience(bag1);
@@ -15,24 +14,34 @@ const audience2 = new Audience(bag2);
 const audience3 = new Audience(bag3);
 const audience4 = new Audience(bag4);
 
-const tickets = [ticket1, ticket1]; // 
+const tickets = [ticket1, ticket1, ticket1, ticket1]; // 
 
 const ticketOffice = new TicketOffice(0, tickets); // 라이언킹 100 , 알라딘 50
 
+console.log(ticketOffice);
+
 const ticketSeller = new TicketSeller(ticketOffice);
-if(!ticketSeller.sellTo(audience4)) {
-  console.log(ticketSeller.getMsg());
-}
+// if(!ticketSeller.sellTo(audience4)) {
+//   console.log(ticketSeller.getMsg());
+// }
+ticketSeller.sellTo(audience1);
+ticketSeller.sellTo(audience2);
+ticketSeller.sellTo(audience3);
+ticketSeller.sellTo(audience1);
 ticketSeller.sellTo(audience2);
 
 
+
 // console.log('audience1 amount :', audience1.bag); // 10000 Ticket empty
 // console.log('ticketSeller > ', ticketSeller);
 
-ticketSeller.sellTo(audience4);
-// console.log('audience1 amount :', audience1.bag); // 10000 Ticket empty
+// console.log('audience2 amount :', audience2.bag); // 10000 Ticket empty
 // console.log('ticketSeller > ', ticketSeller);
-console.log('audience4 amount :', audience4.bag); // 10000 Ticket empty
+
+// console.log('audience3 amount :', audience3.bag); // 10000 Ticket empty
+// console.log('ticketSeller > ', ticketSeller);
+
+console.log('audience2 amount :', audience2.bag); // 10000 Ticket empty
 console.log('ticketSeller > ', ticketSeller);
 
 
@@ -40,10 +49,6 @@ console.log('ticketSeller > ', ticketSeller);
 
 // 관중이 돈이 없는 경우
 // ticket이 다 팔리고 없는 경우
-
-
-
-
 
 // ticketSeller.sellTo(e2);
 // ticketSeller.sellTo(e3);
