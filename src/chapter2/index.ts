@@ -34,7 +34,6 @@ interface DiscountCondition{
 
 abstract class DiscountPolicy {
   conditions: DiscountCondition[] = new Array();
-  msg: string = "";
   constructor(conditions: DiscountCondition[]) {
     this.conditions = conditions;
   }
