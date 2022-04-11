@@ -19,9 +19,11 @@ class Movie {
     }
   }
 
-  calculateMovieFee(screening : Screening):Money | undefined{
+  calculateMovieFee(screening: Screening): Money | undefined{
+    const discountScreening = this.discountPolicy.calculateDiscountAmount(screening);
     if(this.fee) {
-      return this.fee.minus(this.discountPolicy.calculateDiscountAmount(screening));
+      if(discountScreening)
+      return this.fee.minus(discountScreening);
     }
   }
 }
@@ -32,20 +34,24 @@ interface DiscountCondition{
 
 abstract class DiscountPolicy {
   conditions: DiscountCondition[] = new Array();
-
+  msg: string = "";
   constructor(conditions: DiscountCondition[]) {
     this.conditions = conditions;
   }
 
-  calculateDiscountAmount(screening: Screening): Money {
+  calculateDiscountAmount(screening: Screening): Money | undefined {
+   let cal: Money | null = null;
+
     this.conditions.map((a) => {
       if(a.isSatisfiedBy(screening)) {
-        return this.getDiscountAmount(screening);
+        cal =  this.getDiscountAmount(screening);
       }else {
-        return 0;
+        cal = new Money(0);
       }
     })
-    return new Money(0) || Money;
+    if(cal) {
+      return cal;
+    } return undefined;
   }
 
   abstract getDiscountAmount(screening: Screening): Money;
@@ -64,33 +70,51 @@ class SequenceCondition implements DiscountCondition {
 }
 
 interface DayOfWeek {
-
+  day: string
 }
 
 interface LocalTime {
-
+  startTime: number,
+  endTime: number
 }
 
 class PeriodCondition implements DiscountCondition {
-  dayOfWeek: DayOfWeek | null = null;
-  startTime: LocalTime | null = null;
-  endTime: LocalTime | null = null;
+  dayOfWeek: string | null = null;
+  startTime: number = 0;
+  endTime: number = 0;
 
-  constructor(dayOfWeek: DayOfWeek, startTime: LocalTime, endTime: LocalTime) {
-    this.dayOfWeek = dayOfWeek;
-    this.startTime = startTime;
-    this.endTime = endTime;
+  constructor(day: DayOfWeek, time:LocalTime) {
+    this.dayOfWeek = day.day;
+    this.startTime = time.startTime;
+    this.endTime = time.endTime;
   }
 
-  isEqualStartTime(screeing: Screening): boolean {
-    if(this.startTime && this.endTime) {
-      this.startTime <= screeing.getStartTime() <= this.endTime
+  isEqualScreeningTime(screeing: Screening): boolean {
+    if(screeing.getStartTime() >= this.startTime && screeing.getStartTime() <= this.endTime) {
+      return true;
+    }else {
+      return false;
     }
-    return true;
+  }
+
+  isEqualDayOfWeek(screeing: Screening): boolean {
+    if(this.dayOfWeek === screeing.getDayOfWeek()) {
+      return true;
+    }else {
+      return false;
+    }
+  }
+
+  isEqualAll(screeing: Screening): boolean {
+    if(this.isEqualDayOfWeek(screeing) && this.isEqualScreeningTime(screeing)) {
+      return true;
+    }else {
+      return false;
+    }
   }
 
   isSatisfiedBy(screeing: Screening): boolean {
-    return (screeing.getDayOfWeek == this.dayOfWeek) && this.isEqualStartTime(screeing);
+    return this.isEqualAll(screeing);
   }
 
 } 
@@ -103,11 +127,28 @@ class AmountDiscountPolicy extends DiscountPolicy {
     this.discountAmount = discountAmount;
   }
   
-  protected getDiscountAmount(screening: Screening): Money | undefined{
+  getDiscountAmount(screening: Screening): Money {
     if(this.discountAmount) {
       return this.discountAmount;
     }
-    
+    return new Money (0);
+  }
+}
+
+class PercenDiscountPolicy extends DiscountPolicy {
+  percent: number = 0;
+
+  constructor(percent: number, conditions: DiscountCondition[]) {
+    super(conditions);
+    this.percent = percent;
+  }
+
+  getDiscountAmount(screening: Screening): Money {
+    const movieFee = screening.getMovieFee();
+    if(movieFee) {
+      return movieFee.times(this.percent);
+    }
+    return new Money(0);
   }
 }
 
@@ -135,7 +176,7 @@ class Money {
   }
 
   times(percent: number): Money {
-    return new Money(percent / this.amount);
+    return new Money(percent *  this.amount);
   }
 
   isLessThan(other: Money): boolean {
@@ -167,17 +208,13 @@ class Reservation {
 
 }
 
-
-
-
 class Screening {
   movie: Movie | null = null;
   sequence: number= 0;
   whenScreenedTime: number= 0;
-  whenScreenedDate: number= 0;
+  whenScreenedDate: string = "";
 
-
-  constructor(movie: Movie, sequence: number, whenScreenedTime: number, whenScreenedDate: number) {
+  constructor(movie: Movie, sequence: number, whenScreenedTime: number, whenScreenedDate: string) {
     this.movie = movie;
     this.sequence = sequence;
     this.whenScreenedTime = whenScreenedTime;
@@ -188,7 +225,7 @@ class Screening {
     return this.whenScreenedTime;
   }
 
-  getDayOfWeek(): number {
+  getDayOfWeek(): string {
     return this.whenScreenedDate;
   }
 
@@ -199,19 +236,28 @@ class Screening {
   getMovieFee(): Money | null {
     if(this.movie) {
       return this.movie.getFee();
+    } else {
+      return null;
     }
-    return null;
   }
 
-  // reserve(customer: CustomElementRegistry, audienceCount: number): Reservation {
-  //   return new Reservation(customer, this, calculateFee(audienceCount), audienceCount);
-  // }
+  reserve(customer: Customer, audienceCount: number): Reservation | undefined {
+    const calculateFees = this.calculateFee(audienceCount);
+    if(calculateFees) {
+      return new Reservation(customer, this, calculateFees, audienceCount);
+    }
+    return undefined;
+  }
 
-  // calculateFee(audienceCount: number): Money | undefined {
-  //   if(this.movie) {
-  //     return this.movie.calculateMovieFee(this).times(audienceCount);
-  //   }
-  // }
+  calculateFee(audienceCount: number): Money | undefined {
+    if(this.movie) {
+      const movieCalculateFee = this.movie.calculateMovieFee(this);
+      if(movieCalculateFee) {
+        return movieCalculateFee.times(audienceCount);
+      }
+    }
+    return undefined;
+  }
 }
 
-export {Movie, Screening, SequenceCondition, DiscountPolicy, DiscountCondition, Money};
+export {Movie, Screening, SequenceCondition, DiscountPolicy, DiscountCondition, Money, PeriodCondition, PercenDiscountPolicy, AmountDiscountPolicy, Customer, Reservation};
