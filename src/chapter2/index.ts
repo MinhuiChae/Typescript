@@ -1,7 +1,7 @@
 class Movie {
   title: string = "";
   runningTime: number = 0;
-  fee: Money | null = null;
+  fee: Money =  new Money(0);
   discountPolicy: DiscountPolicy;
 
   constructor(title: string, runningTime: number, fee: Money, discountPolicy: DiscountPolicy) {
@@ -35,26 +35,18 @@ interface DiscountCondition{
 abstract class DiscountPolicy {
   duplicate: boolean = true;
   conditions: DiscountCondition[] = new Array();
-  discountPercent: number = 0;
 
-  constructor(conditions: DiscountCondition[], duplicate: boolean, discountPercent: number) {
+  constructor(conditions: DiscountCondition[], duplicate: boolean) {
     this.conditions = conditions;
     this.duplicate = duplicate;
-    this.discountPercent = discountPercent;
   }
-
-  //중복일 때와 아닐때 cal 값을 구하고 cal을 리턴
-  //중복일 때 = duplicate가 true 이면 discountcondition 조건에 맞는 할인값을 구하고  할인값을 true 수 만큼 더해준다. 그 할인값을 리턴해준다. 
-  //중복이 아닐 때 = duplicate가 false 이면 discountcondition 조건에 맞는 할인값을 구하고  할인 값을 한 번만 리턴해준다.
-
 
   calculateDuplicate(screening: Screening): Money {
     let cal: Money = new Money(0);
-    this.conditions.map((condition, i) => { 
+    this.conditions.map((condition) => { 
       if(condition.isSatisfiedBy(screening)) {
-        const a = this.getDiscountAmount(screening).timesMoney(this.discountPercent);
-        console.log(a);
-        cal.plusMoney(a); /// 
+        const a = this.getDiscountAmount(screening);
+        cal.plusMoney(a);
       }
     });
 
@@ -73,27 +65,13 @@ abstract class DiscountPolicy {
   calculateDiscountAmount(screening: Screening): Money {
     let cal: Money = new Money(0);
 
-    // let sum: number = 0;
-    // 1000 이중 한개라도 있으면  800 디스카운트 하면 된다.
-    // let discountCondition: DiscountCondition | undefined =  this.conditions.find((condition) => condition.isSatisfiedBy(screening));
-    // [true, false, true, false, true]; //2400
-
     if(this.duplicate) {
       cal = this.calculateDuplicate(screening);
     }else {
       cal = this.calculateSingle(screening);
     }
 
-    // const condition = this.conditions.find((condition) => condition.isSatisfiedBy(screening));
-    // if (condition) {
-    //   cal.plusMoney(this.getDiscountAmount(screening)); 
-    // }
-     
    return cal;
-  }
-
-  isDuplicate():boolean {
-    return this.duplicate;
   }
 
   abstract getDiscountAmount(screening: Screening): Money;
@@ -164,8 +142,8 @@ class PeriodCondition implements DiscountCondition {
 class AmountDiscountPolicy extends DiscountPolicy {
   discountAmount: Money | null = null;
 
-  constructor(discountAmount: Money, conditions: DiscountCondition[], duplicate: boolean , discountPercent: number) {
-    super(conditions, duplicate, discountPercent);
+  constructor(discountAmount: Money, conditions: DiscountCondition[], duplicate: boolean) {
+    super(conditions, duplicate);
     this.discountAmount = discountAmount;
   }
   
@@ -180,8 +158,8 @@ class AmountDiscountPolicy extends DiscountPolicy {
 class PercenDiscountPolicy extends DiscountPolicy {
   percent: number = 0;
 
-  constructor(percent: number, conditions: DiscountCondition[], duplicate: boolean, discountPercent: number) {
-    super(conditions, duplicate, discountPercent);
+  constructor(percent: number, conditions: DiscountCondition[], duplicate: boolean) {
+    super(conditions, duplicate);
     this.percent = percent;
   }
 
@@ -232,23 +210,17 @@ class Money {
   plusMoney(money: Money) {
     this.amount  +=  money.amount;
   }
-
-  timesMoney(money: number): Money {
-    this.amount = this.amount;
-
-    return new Money(this.amount *= money);
-  }
-
 }
 
 class Customer {
+  name: string = "";
 
 }
 
 class Reservation {
   customer: Customer | null = null;
   screening: Screening | null = null;
-  fee: Money | null = null;
+  fee: Money = new Money(0);
   audienceCount: number = 0;
 
   constructor(customer: Customer, screening: Screening, fee: Money, audienceCount: number) {
@@ -257,7 +229,6 @@ class Reservation {
     this.fee = fee;
     this.audienceCount = audienceCount;
   }
-
 }
 
 class Screening {
