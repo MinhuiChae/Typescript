@@ -28,6 +28,14 @@ class Movie {
   }
 }
 
+class TicketOffice {
+  amount: Money = new Money(0);
+
+  constructor(amount: Money) {
+    this.amount = amount;
+  }
+}
+
 interface DiscountCondition{
   isSatisfiedBy(screeing: Screening): boolean;
 }
@@ -213,8 +221,7 @@ class Money {
 }
 
 class Customer {
-  name: string = "";
-
+  fee: Money = new Money(0);
 }
 
 class Reservation {
@@ -236,6 +243,7 @@ class Screening {
   sequence: number= 0;
   whenScreenedTime: number= 0;
   whenScreenedDate: string = "";
+  calFee: Money = new Money(0);
 
   constructor(movie: Movie, sequence: number, whenScreenedTime: number, whenScreenedDate: string) {
     this.movie = movie;
@@ -264,9 +272,11 @@ class Screening {
     }
   }
 
-  reserve(customer: Customer, audienceCount: number): Reservation | undefined {
+  reserve(customer: Customer, audienceCount: number, ticketOffice: TicketOffice): Reservation | undefined {
     const calculateFees = this.calculateFee(audienceCount);
     if(calculateFees) {
+      customer.fee = calculateFees;
+      ticketOffice.amount.plusMoney(customer.fee);
       return new Reservation(customer, this, calculateFees, audienceCount);
     }
     return undefined;
@@ -276,11 +286,12 @@ class Screening {
     if(this.movie) {
       const movieCalculateFee = this.movie.calculateMovieFee(this);
       if(movieCalculateFee) {
-        return movieCalculateFee.times(audienceCount);
+        this.calFee = movieCalculateFee.times(audienceCount)
+        return this.calFee;
       }
     }
     return undefined;
   }
 }
 
-export {Movie, Screening, SequenceCondition, DiscountPolicy, DiscountCondition, Money, PeriodCondition, PercenDiscountPolicy, AmountDiscountPolicy, Customer, Reservation};
+export {Movie, Screening, SequenceCondition, TicketOffice, DiscountPolicy, DiscountCondition, Money, PeriodCondition, PercenDiscountPolicy, AmountDiscountPolicy, Customer, Reservation};
