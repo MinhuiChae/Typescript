@@ -207,6 +207,10 @@ class Money {
     return new Money(percent *  this.amount);
   }
 
+  mtimes(money: Money): Money {
+    return new Money(this.amount * money.amount);
+  }
+
   isLessThan(other: Money): boolean {
     return this.amount / (other.amount) < 0;
   }

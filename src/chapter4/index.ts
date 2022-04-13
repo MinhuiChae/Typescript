@@ -6,6 +6,13 @@ class Movie {
   fee: Money  = new Money(0);
   discountCondition: DiscountCondition[] | null = null;
 
+  constructor(title: string, runningTime: number, fee: Money, discountCondition: DiscountCondition[]) {
+    this.title = title;
+    this.runningTime = runningTime;
+    this.fee = fee;
+    this.discountCondition = discountCondition;
+  }
+
   movieType: MovieType | null = null;
   discountAmount: Money = new Money(0);
   discountPercent: number = 0;
@@ -59,14 +66,14 @@ class Movie {
 }
 
 enum MovieType {
-  AMOUNT_DISCOUNT,
-  PERCENT_DISCOUNT,
-  NONE_DISCOUNT
+  AMOUNT_DISCOUNT = "amountDiscount",
+  PERCENT_DISCOUNT = "percentDiscount",
+  NONE_DISCOUNT = "noneDiscount"
 }
 
 enum DiscountConditionType {
-  SEQUENCE,
-  PERIOD
+  SEQUENCE = "sequence",
+  PERIOD = "period"
 }
 
 class DiscountCondition {
@@ -74,7 +81,6 @@ class DiscountCondition {
   sequence: number = 0;
   dayOfWeek: string = "";
   startTime: number = 0;
-  endTime: number = 0;
 
   getType(): DiscountConditionType | undefined{
     if(this.type) {
@@ -102,14 +108,6 @@ class DiscountCondition {
 
   setStartTime(startTime: number): void {
     this.startTime = startTime;
-  }
-
-  getEndTime(): number {
-    return this.endTime;
-  }
-
-  setEndTime(endTime: number): void {
-    this.endTime = endTime;
   }
 
   getSequence(): number {
@@ -247,15 +245,16 @@ class ReservationAgency {
     let condition = movie?.getDiscountConditions();
     
     if(condition?.find((condition) => condition.getType() == DiscountConditionType.PERIOD)) {
-      condition.map((condition) => {
-        discountable = (screening.getWhenScreenedDate() == condition.getDayOfWeek() && (condition.getStartTime() >= screening.getWhenScreenedTime()));
+      condition.find((condition) => {
+        discountable = (screening.getWhenScreenedDate() == condition.getDayOfWeek() && (condition.getStartTime() <= screening.getWhenScreenedTime()));
       })
     } else {
-      condition?.map((condition) => {
+      condition?.find((condition) => {
         discountable = (condition.getSequence() == screening.getSequence());
+        console.log(discountable);
       })
     }
-
+    
     let fee:Money = new Money(0);
     if(discountable) {
       let discountAmount: Money = new Money(0);
@@ -279,8 +278,8 @@ class ReservationAgency {
       }
     }
 
-    return new Reservation(customer, screening, fee, audienceCount);
+    return new Reservation(customer, screening, fee.times(audienceCount), audienceCount);
   }
 }
 
-export {ReservationAgency, Customer, Screening, DiscountCondition, Movie};
+export {ReservationAgency, Customer, Screening, DiscountCondition, Movie, MovieType, DiscountConditionType};
