@@ -89,9 +89,7 @@ class DiscountCondition {
   }
 
   setType(type: DiscountConditionType): void {
-    if(this.type) {
       this.type = type;
-    }
   }
   
   getDayOfWeek(): string {
@@ -267,7 +265,7 @@ class ReservationAgency {
           break;
         case MovieType.NONE_DISCOUNT:
           discountAmount = new Money(0);
-          break
+          break;
       }
       if(movie) {
         fee = movie.getFee().minus(discountAmount);
@@ -283,3 +281,52 @@ class ReservationAgency {
 }
 
 export {ReservationAgency, Customer, Screening, DiscountCondition, Movie, MovieType, DiscountConditionType};
+
+//--------------------------------------------------------------------------------------------------------------------------------------------
+
+class Rectangle {
+  private left: number = 0;
+  private top: number = 0;
+  private right: number = 0;
+  private bottom: number = 0;
+
+  constructor(left: number, top: number, right: number, bottom: number) {
+    this.left = left;
+    this.top = top;
+    this.right = right;
+    this.bottom = bottom;
+  }
+
+  getLeft(): number {
+    return this.left;
+  }
+
+  setLeft(left: number): void {
+    this.left = left;
+  }
+
+  getTop(): number {
+    return this.top;
+  }
+
+  setTop(top: number): void {
+    this.top = top;
+  }
+
+  getRight(): number {
+    return this.right;
+  }
+
+  setRight(right: number): void {
+    this.right = right;
+  }
+
+  getBottom(): number {
+    return this.bottom;
+  }
+
+  setBottom(bottom: number): void {
+    this.bottom = bottom;
+  }
+
+}
