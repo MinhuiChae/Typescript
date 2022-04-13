@@ -225,7 +225,7 @@ class Screening {
       case MovieType.PERCENT_DISCOUNT:
         if(this.movie.isDiscountable({dayOfWeek: this.whenScreenedDate, time: this.whenScreenedTime, sequence: this.sequence})) {
           return this.movie.calculatePercentDiscountedFee().times(audienceCount);
-        }
+        } break;
       case MovieType.NONE_DISCOUNT:
         return this.movie.calculateNoneDiscountedFee().times(audienceCount);
     }
