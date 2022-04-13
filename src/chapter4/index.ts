@@ -1,10 +1,10 @@
 import {Money} from "../chapter2/index";
 
 class Movie {
-  title: string = "";
-  runningTime: number = 0;
-  fee: Money  = new Money(0);
-  discountCondition: DiscountCondition[] | null = null;
+  private title: string = "";
+  private runningTime: number = 0;
+  private fee: Money  = new Money(0);
+  private discountCondition: DiscountCondition[] | null = null;
 
   constructor(title: string, runningTime: number, fee: Money, discountCondition: DiscountCondition[]) {
     this.title = title;
@@ -63,6 +63,37 @@ class Movie {
     this.discountPercent = discountPercent;
   }
 
+  calculateAmountDiscountedFee(): Money {
+    if(this.movieType == MovieType.AMOUNT_DISCOUNT) {
+      return this.fee.minus(this.discountAmount);
+    } return new Money(0);
+  }
+
+  calculatePercentDiscountedFee(): Money {
+    if(this.movieType == MovieType.PERCENT_DISCOUNT) {
+      return this.fee.minus(this.fee.times(this.discountPercent));
+    } return new Money(0);
+  }
+
+  calculateNoneDiscountedFee(): Money {
+    if(this.movieType == MovieType.NONE_DISCOUNT) {
+      return this.fee;
+    } return new Money(0);
+  }
+
+  isDiscountable(attr: IDiscountable): boolean {
+    if(this.discountCondition?.find((condition) => condition.getType() == DiscountConditionType.PERIOD)) {
+      if(this.discountCondition.find((condition)=> condition.isDiscountable({dayOfWeek: attr.dayOfWeek, time: attr.time}))) {
+        return true;
+      }
+    } else {
+      if(this.discountCondition?.find((condition) => condition.isDiscountable({sequence: attr.sequence}))) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
 
 enum MovieType {
@@ -76,11 +107,17 @@ enum DiscountConditionType {
   PERIOD = "period"
 }
 
+interface IDiscountable {
+  dayOfWeek?: string,
+  time?: number,
+  sequence?: number
+}
+
 class DiscountCondition {
-  type: DiscountConditionType | null = null;
-  sequence: number = 0;
-  dayOfWeek: string = "";
-  startTime: number = 0;
+  private type: DiscountConditionType | null = null;
+  private sequence: number = 0;
+  private dayOfWeek: string = "";
+  private startTime: number = 0;
 
   getType(): DiscountConditionType | undefined{
     if(this.type) {
@@ -114,6 +151,16 @@ class DiscountCondition {
 
   setSequence(sequence: number): void {
     this.sequence = sequence;
+  }
+
+  isDiscountable(attr: IDiscountable): boolean {
+    if(this.type == DiscountConditionType.PERIOD && attr.time) {
+     return (this.dayOfWeek == attr.dayOfWeek) && (this.startTime >= attr.time);
+    } else if(this.type == DiscountConditionType.SEQUENCE) {
+      return this.sequence == attr.sequence;
+    } else {
+      return false;
+    }
   }
 }
 
@@ -167,6 +214,23 @@ class Screening {
 
   setSequence(sequence: number): void {
     this.sequence = sequence;
+  }
+
+  calculateFee(audienceCount: number): Money | undefined{
+    switch (this.movie?.getMovieType()) {
+      case MovieType.AMOUNT_DISCOUNT:
+        if(this.movie.isDiscountable({dayOfWeek: this.whenScreenedDate, time: this.whenScreenedTime, sequence: this.sequence})) {
+          return this.movie.calculateAmountDiscountedFee().times(audienceCount);
+        } break;
+      case MovieType.PERCENT_DISCOUNT:
+        if(this.movie.isDiscountable({dayOfWeek: this.whenScreenedDate, time: this.whenScreenedTime, sequence: this.sequence})) {
+          return this.movie.calculatePercentDiscountedFee().times(audienceCount);
+        }
+      case MovieType.NONE_DISCOUNT:
+        return this.movie.calculateNoneDiscountedFee().times(audienceCount);
+    }
+
+    return this.movie?.getFee().times(audienceCount);
   }
 }
 
@@ -235,48 +299,10 @@ class Customer {
 }
 
 class ReservationAgency {
-  reserve(screening: Screening, customer: Customer, audienceCount: number): Reservation {
-    let movie =  screening.getMovie();
-
-    let discountable: boolean = false;
-
-    let condition = movie?.getDiscountConditions();
-    
-    if(condition?.find((condition) => condition.getType() == DiscountConditionType.PERIOD)) {
-      condition.find((condition) => {
-        discountable = (screening.getWhenScreenedDate() == condition.getDayOfWeek() && (condition.getStartTime() <= screening.getWhenScreenedTime()));
-      })
-    } else {
-      condition?.find((condition) => {
-        discountable = (condition.getSequence() == screening.getSequence());
-        console.log(discountable);
-      })
-    }
-    
-    let fee:Money = new Money(0);
-    if(discountable) {
-      let discountAmount: Money = new Money(0);
-      switch(movie?.getMovieType()) {
-        case MovieType.AMOUNT_DISCOUNT:
-          discountAmount = movie.getDiscountAmount();
-          break;
-        case MovieType.PERCENT_DISCOUNT:
-          discountAmount = movie.getFee().times(movie.getDiscountPercent());
-          break;
-        case MovieType.NONE_DISCOUNT:
-          discountAmount = new Money(0);
-          break;
-      }
-      if(movie) {
-        fee = movie.getFee().minus(discountAmount);
-      }
-    } else {
-      if(movie) {
-        fee = movie?.getFee();
-      }
-    }
-
-    return new Reservation(customer, screening, fee.times(audienceCount), audienceCount);
+  reserve(screening: Screening, customer: Customer, audienceCount: number): Reservation | undefined {
+    let fee = screening.calculateFee(audienceCount);
+    if(fee)
+    return new Reservation(customer, screening, fee, audienceCount);
   }
 }
 
