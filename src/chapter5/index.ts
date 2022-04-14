@@ -1,5 +1,5 @@
-import {Customer, MovieType, DiscountConditionType} from "../chapter4";
-import {DiscountPolicy, Money} from "../chapter2/index";
+import {Customer} from "../chapter4";
+import {Money} from "../chapter2/index";
 
 class Screening {
   private movie: Movie | null = null;
@@ -79,80 +79,105 @@ class Reservation {
   }
 }
 
-class DiscountCondition{
-  private type: DiscountConditionType | null = null;
-  private sequence: number = 0;
-  private dayOfWeek: string = "";
-  private startTime: number = 0;
-
-  isSatisfiedBy(screeing: Screening): boolean {
-    if(this.type == DiscountConditionType.PERIOD) {
-      return this.isSatisfiedByPeriod(screeing);
-    }
-
-    return this.isSatiesfiedBySequence(screeing);
-  }
-
-  isSatisfiedByPeriod(screeing: Screening): boolean {
-    return (this.dayOfWeek == screeing.getWhenScreenedDate() && screeing.getWhenScreenedTime() >= this.startTime)
-  }
-
-  isSatiesfiedBySequence(screeing: Screening): boolean {
-    return this.sequence == screeing.getSequence();
-  }
+interface DiscountCondition{
+  isSatisfiedBy(screeing: Screening): boolean;
 }
 
-class Movie {
+abstract class Movie {
   private title: string = "";
   private runningTime: number = 0;
   private fee: Money  = new Money(0);
-  private discountCondition: DiscountCondition[] | null = null;
+  private discountCondition?: DiscountCondition[] | null = null;
 
-  constructor(title: string, runningTime: number, fee: Money, discountCondition: DiscountCondition[]) {
+  constructor(title: string, runningTime: number, fee: Money, discountCondition?: DiscountCondition[]) {
     this.title = title;
     this.runningTime = runningTime;
     this.fee = fee;
     this.discountCondition = discountCondition;
   }
 
-  movieType: MovieType | null = null;
+  calculateMovieFee(screeing: Screening): Money {
+    if(this.isDiscountable(screeing)) {
+      return this.fee.minus(this.calculateDiscountAmount());
+    }
+
+    return this.fee;
+  }
+
+  isDiscountable(screeing: Screening): boolean {
+    if(this.discountCondition?.find((condition) => condition.isSatisfiedBy(screeing))) {
+      return true;
+    } return false;
+  }
+
+  getFee(): Money {
+    return this.fee;
+  }
+
+  abstract calculateDiscountAmount(): Money;
+}
+
+class PeriodCondition implements DiscountCondition {
+  private dayOfWeek: string = "";
+  private time: number = 0;
+
+  constructor(dayOfWeek: string, time: number) {
+    this.dayOfWeek = dayOfWeek;
+    this.time = time;
+  }
+
+  isSatisfiedBy(screeing: Screening): boolean {
+    return (this.dayOfWeek == screeing.getWhenScreenedDate() && screeing.getWhenScreenedTime() >= this.time)
+  }
+}
+
+class SequenceCondition implements DiscountCondition {
+  private sequence: number = 0;
+
+  constructor(sequence: number) {
+    this.sequence = sequence;
+  }
+
+  isSatisfiedBy(screeing: Screening): boolean {
+    return this.sequence == screeing.getSequence();
+  }
+}
+
+class AmountDiscountMovie extends Movie {
   discountAmount: Money = new Money(0);
-  discountPercent: number = 0;
 
-  calculateMovieFee(screening: Screening): Money {
-   if(this.isDiscountable(screening)) {
-     return this.fee.minus(this.calculateDiscountAmount());
-   }
-   return this.fee;
+  constructor(title: string, runningTime: number, fee: Money, discountAmount: Money, discountCondition: DiscountCondition[]) {
+    super(title, runningTime, fee, discountCondition);
+    this.discountAmount = discountAmount;
   }
 
-  private isDiscountable(screeing: Screening): boolean {
-     if(this.discountCondition?.map((condition) => condition.isSatisfiedBy(screeing))) {
-       return true;
-     } return false;
-  }
-
-  private calculateDiscountAmount(): Money {
-    switch(this.movieType) {
-      case MovieType.AMOUNT_DISCOUNT:
-        return this.calculateAmountDiscountAmount();
-      case MovieType.PERCENT_DISCOUNT:
-        return this.calculatePercentDiscountAmount();
-      case MovieType.NONE_DISCOUNT:
-        return this.calculateNoneDiscountAmount();
-    } return new Money(0);
-  }
-
-  private calculateAmountDiscountAmount() {
+  calculateDiscountAmount(): Money {
     return this.discountAmount;
   }
+}
 
-  private calculatePercentDiscountAmount() {
-    return this.fee.times(this.discountPercent);
+class PercentDiscountMovie extends Movie {
+  private percent: number = 0;
+
+  constructor(title: string, runningTime: number, fee: Money, percent: number, discountCondition: DiscountCondition[]) {
+    super(title, runningTime, fee, discountCondition);
+    this.percent = percent;
   }
 
-  private calculateNoneDiscountAmount() {
+  calculateDiscountAmount(): Money {
+    return this.getFee().times(this.percent);
+  }
+}
+
+class NoneDiscountMovie extends Movie {
+  constructor(title: string, runningTime: number, fee: Money) {
+    super(title, runningTime, fee);
+  }
+
+  calculateDiscountAmount(): Money {
     return new Money(0);
   }
 
 }
+
+export {Customer, Money, Screening, PeriodCondition, SequenceCondition, AmountDiscountMovie, PercentDiscountMovie, NoneDiscountMovie};
