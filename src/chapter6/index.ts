@@ -40,8 +40,15 @@ class Bag {
     return this.ticket !== undefined;
   }
 
-  setTicket(ticket: Ticket) {
-    this.ticket = ticket;
+  setTicket(ticket: Ticket): number {
+    if(this.hasInvitation()) {
+      this.ticket = ticket;
+      return 0;
+    } else {
+      this.ticket = ticket;
+      this.minusAmount(ticket.getFee());
+      return ticket.getFee();
+    }
   }
 
   minusAmount(amount: number) {
@@ -79,14 +86,7 @@ class Audience {
   }
 
   setTicket(ticket: Ticket): number {
-    if(this.bag.hasInvitation()) {
-      this.bag.setTicket(ticket);
-      return 0;
-    } else {
-      this.bag.setTicket(ticket);
-      this.bag.minusAmount(ticket.getFee());
-      return ticket.getFee();
-    }
+    return this.bag.setTicket(ticket);
   }
 }
 
