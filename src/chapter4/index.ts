@@ -306,4 +306,4 @@ class ReservationAgency {
   }
 }
 
-export {ReservationAgency, Customer, Screening, DiscountCondition, Movie, MovieType, DiscountConditionType};
+export {ReservationAgency, Customer, Screening, DiscountCondition, Movie, MovieType, DiscountConditionType, Reservation};
