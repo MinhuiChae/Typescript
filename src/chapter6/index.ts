@@ -157,18 +157,9 @@ class TicketSeller {
   }
 
   setTicket(audience: Audience): void {
-    if(audience.bag.hasInvitation()) {
-      let ticket = this.ticketOffice.getTicket();
-      if(ticket)
-      audience.bag.setTicket(ticket);
-    } else {
-      let ticket = this.ticketOffice.getTicket();
-      if(ticket) {
-        audience.bag.minusAmount(ticket?.getFee());
-        this.ticketOffice.plusAmount(ticket?.getFee());
-        audience.bag.setTicket(ticket);
-      }
-    }
+    let office = this.ticketOffice.getTicket();
+    if(office)
+    this.ticketOffice.plusAmount(audience.setTicket(office));
   }
 }
 
