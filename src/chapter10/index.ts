@@ -19,12 +19,11 @@ class Call {
     return 0;
   }
 
-  getForm(): Date {
+  getFrom(): Date {
     if(this.from) {
       return this.from;
     } return new Date(0);
   } 
-
 }
 
 abstract class Phone {
@@ -39,6 +38,7 @@ abstract class Phone {
     let result: Money = new Money(0);
 
     if(this.calls?.map((call:Call) => result.plus(this.calculateCallFee(call)))) {
+      console.log(this.taxRate);
       return result.plus(result.times(this.taxRate));
     } return new Money(0);
   }
@@ -77,7 +77,7 @@ class NightlyDiscountPhone extends Phone {
 
   calculateCallFee(call: Call): Money {
 
-    if(call.getForm().getHours()>= NightlyDiscountPhone.LATE_NIGHT_HOUR) {
+    if(call.getFrom().getHours()>= NightlyDiscountPhone.LATE_NIGHT_HOUR) {
       return this.nightlyAmount.times(call.getDuration()/this.seconds)
     } else {
       return this.regularAmount.times(call.getDuration()/this.seconds)
