@@ -4,6 +4,34 @@
   <title>Document</title>
 </head>
 <body>
-  <div></div>
+  <input type="text" id="choiceNumber" value="5">
+  <button type="button" onclick="compareNumber2()">계산</button><br>
+  <input type="text" id="result" readonly>
+  <script>
+
+  
+    function getElValue() {
+      const el = document.getElementById('choiceNumber');
+      return el.value;
+    }
+
+    function compareNumber2() {
+      const number = Number(getElValue());
+      document.getElementById('result').value = window.compareNumber(number);
+    }
+
+    function compareNumber3() {
+      const number = Number(getElValue());
+      document.getElementById('result').value = window.compareNumber(number);
+    }
+
+    function compareNumber4() {
+      const number = Number(getElValue());
+      document.getElementById('result').value = window.compareNumber(number);
+    }
+
+  </script>
+
+
 </body>
 </html>

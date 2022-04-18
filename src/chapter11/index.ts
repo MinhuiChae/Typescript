@@ -9,11 +9,12 @@ abstract class Phone {
     if(this.calls?.map((call:Call) => result.plus(this.calculateCallFee(call)))) {
       return result;
     } else {
-      return new Money(0);
+      return this.afterCalculated(result);
     }
   }
 
   abstract calculateCallFee(call: Call): Money;
+  abstract afterCalculated(fee: Money): Money;
 }
 
 class RegularPhone extends Phone {
@@ -28,6 +29,10 @@ class RegularPhone extends Phone {
 
   calculateCallFee(call: Call): Money {
     return this.amount.times(call.getDuration()/this.seconds);
+  }
+
+  afterCalculated(fee: Money): Money {
+    return fee;
   }
 }
 
@@ -52,6 +57,10 @@ class NightlyDiscountPhone extends Phone {
     } else {
       return this.regularAmount.times(call.getDuration()/this.seconds)
     }
+  }
+
+  afterCalculated(fee: Money): Money {
+    return fee;
   }
 }
 
