@@ -1,20 +1,16 @@
 import { Call, Money } from "../chapter10";
 
 abstract class Phone {
-  private taxRate: number = 0;
   calls: Call[] = new Array();
-
-  constructor(taxRate: number) {
-    this.taxRate = taxRate;
-  }
 
   calculateFee(): Money {
     let result: Money = new Money(0);
 
     if(this.calls?.map((call:Call) => result.plus(this.calculateCallFee(call)))) {
-      console.log(this.taxRate);
-      return result.plus(result.times(this.taxRate));
-    } return new Money(0);
+      return result;
+    } else {
+      return new Money(0);
+    }
   }
 
   abstract calculateCallFee(call: Call): Money;
@@ -24,8 +20,8 @@ class RegularPhone extends Phone {
   private amount: Money = new Money(0);
   private seconds: number = 0;
 
-  constructor(amount: Money, seconds: number, taxRate: number) {
-    super(taxRate);
+  constructor(amount: Money, seconds: number) {
+    super();
     this.amount = amount;
     this.seconds = seconds;
   }
@@ -42,8 +38,8 @@ class NightlyDiscountPhone extends Phone {
   private regularAmount: Money = new Money(0);
   private seconds: number = 0;
 
-  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, taxRate: number) {
-    super(taxRate);
+  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number) {
+    super();
     this.nightlyAmount = nightlyAmount;
     this.regularAmount = regularAmount;
     this.seconds = seconds;
@@ -56,5 +52,19 @@ class NightlyDiscountPhone extends Phone {
     } else {
       return this.regularAmount.times(call.getDuration()/this.seconds)
     }
+  }
+}
+
+class TaxableRegularPhone extends RegularPhone {
+  private taxRate: number = 0;
+
+  constructor(amount: Money, seconds: number, taxRate: number) {
+    super(amount, seconds);
+    this.taxRate = taxRate;
+  }
+
+  calculateFee(): Money {
+    let fee = super.calculateFee();
+    return fee.plus(fee.times(this.taxRate));
   }
 }

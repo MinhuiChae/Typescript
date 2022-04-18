@@ -32,28 +32,28 @@ class PlayList {
   getSingers(): Map<string, string> {
     return this.singers;
   }
+
+
 }
 
 class PersonalPlayList extends PlayList {
+  
+  isExist(song: Song): boolean {
+    return this.findIndex(song) > -1;
+  }
+
+  findIndex(song: Song): number {
+    return this.getTracks().findIndex((item) => item === song);
+  }
+
   remove(song: Song): void {
-    const idx = this.getTracks().findIndex((item) => item === song);
+    const idx = this.findIndex(song);
+    if (idx === -1) return;
     this.getTracks().splice(idx,1);
     this.getSingers().delete(song.getSinger());
   }
 }
 
 
-const p = new PersonalPlayList();
-const s = new Song("ㅇ", "ㅇ");
-const s2 = new Song("ㅇd", "ㅇd");
-const s1 = new Song("s", "s");
-p.append(s);
-p.append(s1);
-p.append(s2);
 
-
-p.remove(s2);
-console.log(p.getTracks());
-console.log(p);
-
-
+export {Song, PlayList, PersonalPlayList };
