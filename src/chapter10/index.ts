@@ -27,63 +27,8 @@ class Call {
 
 }
 
-class Phone {
-  private amount: Money = new Money(0);
-  private seconds: number = 0;
-  private calls: Call[] = new Array();
-
-  constructor(amount: Money, seconds: number) {
-    this.amount = amount;
-    this.seconds = seconds;
-  }
-
-  call(call: Call): void {
-    if(this.calls) {
-      this.calls.push(call);
-    }
-  }
-
-  getCalls(): Call[] | undefined {
-    if(this.calls)
-    return this.calls;
-  }
-
-  getAmount(): Money {
-    return this.amount;
-  }
-
-  getSeconds(): number {
-    return this.seconds;
-  }
-
-  calculateFee(): Money {
-    let result: Money = new Money(0);
-
-    if(this.calls?.map((call:Call) => result.plus(this.calculateCallFee(call)))) {
-      return result;
-    } else {
-      return new Money(0);
-    }
-  }
-
-  calculateCallFee(call: Call): Money {
-    return this.amount.times(call.getDuration()/this.seconds);
-  }
-}
-
-class NightlyDiscountPhone {
-  private static LATE_NIGHT_HOUR: number = 22;
-
-  private nightlyAmount: Money = new Money(0);
-  private regularAmount: Money = new Money(0);
-  private seconds: number = 0;
-  private calls: Call[] = new Array();
-
-  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number) {
-    this.nightlyAmount = nightlyAmount;
-    this.regularAmount = regularAmount;
-    this.seconds = seconds;
-  }
+abstract class AbstractPhone {
+  calls: Call[] = new Array();
 
   calculateFee(): Money {
     let result: Money = new Money(0);
@@ -91,6 +36,38 @@ class NightlyDiscountPhone {
     if(this.calls?.map((call:Call) => result.plus(this.calculateCallFee(call)))) {
       return result;
     } return new Money(0);
+  }
+
+  abstract calculateCallFee(call: Call): Money;
+}
+
+class Phone extends AbstractPhone {
+  private amount: Money = new Money(0);
+  private seconds: number = 0;
+
+  constructor(amount: Money, seconds: number) {
+    super();
+    this.amount = amount;
+    this.seconds = seconds;
+  }
+
+  calculateCallFee(call: Call): Money {
+    return this.amount.times(call.getDuration()/this.seconds);
+  }
+}
+
+class NightlyDiscountPhone extends AbstractPhone {
+  private static LATE_NIGHT_HOUR: number = 22;
+
+  private nightlyAmount: Money = new Money(0);
+  private regularAmount: Money = new Money(0);
+  private seconds: number = 0;
+
+  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number) {
+    super();
+    this.nightlyAmount = nightlyAmount;
+    this.regularAmount = regularAmount;
+    this.seconds = seconds;
   }
 
   calculateCallFee(call: Call): Money {
@@ -102,6 +79,7 @@ class NightlyDiscountPhone {
     }
   }
 }
+
 
 
 export {Call, Phone, Money, NightlyDiscountPhone};
