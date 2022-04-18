@@ -27,26 +27,31 @@ class Call {
 
 }
 
-abstract class AbstractPhone {
+abstract class Phone {
+  private taxRate: number = 0;
   calls: Call[] = new Array();
+
+  constructor(taxRate: number) {
+    this.taxRate = taxRate;
+  }
 
   calculateFee(): Money {
     let result: Money = new Money(0);
 
     if(this.calls?.map((call:Call) => result.plus(this.calculateCallFee(call)))) {
-      return result;
+      return result.plus(result.times(this.taxRate));
     } return new Money(0);
   }
 
   abstract calculateCallFee(call: Call): Money;
 }
 
-class Phone extends AbstractPhone {
+class RegularPhone extends Phone {
   private amount: Money = new Money(0);
   private seconds: number = 0;
 
-  constructor(amount: Money, seconds: number) {
-    super();
+  constructor(amount: Money, seconds: number, taxRate: number) {
+    super(taxRate);
     this.amount = amount;
     this.seconds = seconds;
   }
@@ -56,15 +61,15 @@ class Phone extends AbstractPhone {
   }
 }
 
-class NightlyDiscountPhone extends AbstractPhone {
+class NightlyDiscountPhone extends Phone {
   private static LATE_NIGHT_HOUR: number = 22;
 
   private nightlyAmount: Money = new Money(0);
   private regularAmount: Money = new Money(0);
   private seconds: number = 0;
 
-  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number) {
-    super();
+  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, taxRate: number) {
+    super(taxRate);
     this.nightlyAmount = nightlyAmount;
     this.regularAmount = regularAmount;
     this.seconds = seconds;
@@ -82,4 +87,4 @@ class NightlyDiscountPhone extends AbstractPhone {
 
 
 
-export {Call, Phone, Money, NightlyDiscountPhone};
+export {Call, Money,RegularPhone, NightlyDiscountPhone};
