@@ -222,6 +222,12 @@ class Money {
   plusMoney(money: Money) {
     this.amount  +=  money.amount;
   }
+
+  number(): number {
+    return this.amount
+  }
+
+
 }
 
 class Customer {
