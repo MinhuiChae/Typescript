@@ -21,15 +21,62 @@ class Lecture {
     return this.scores;
   }
 
-  // evaluate(): string {
-  //   return ("Pass: " + this.passCount() + "Fail: " + this.failCount());
-  // }
+  evaluate(): string {
+    return ("Pass:" + this.passCount() + " Fail:" + this.failCount());
+  }
 
   passCount(): number | undefined {
-    let arr = this.scores.find((a: number) => a >= this.pass);
-    if(arr)
-    return arr;
+    let cnt: number = 0;
+    let arr = this.scores.map((a: number) => a >= this.pass);
+    arr.filter((a) => {
+      if(a === true) {
+        cnt++;
+      }
+    })
+    return cnt;
+  }
+
+  failCount(): number | undefined {
+    let passCount = this.passCount();
+    if(passCount) {
+      return this.scores.length - passCount;
+    }
   }
 }
+
+class GradeLecture extends Lecture {
+  private grades: Grade[] | null = null;
+
+  constructor(name: string, pass: number, grades: Grade[], scores: number[]) {
+    super(name, pass, scores);
+    this.grades = grades;
+  }
+
+}
+
+class Grade {
+  private name: string = "";
+  private upper: number = 0;
+  private lower: number = 0;
+
+  constructor(name: string, upper: number, lower: number) {
+    this.name = name;
+    this.upper = upper;
+    this.lower = lower;
+  }
+
+  getName(): string {
+    return this.name;
+  }
+
+  isName(name: string): boolean {
+    return this.name == name;
+  }
+
+  include(score: number): boolean {
+    return score >= this.lower && score<= this.upper;
+  }
+}
+
 
 export {Lecture};
