@@ -111,4 +111,54 @@ class RateDiscountableNightlyDiscountPhone extends NightlyDiscountPhone {
   }
 }
 
+class TaxableAndRateDiscountableRegularPhone extends TaxableRegularPhone {
+  private discountAmount: Money = new Money(0);
 
+  constructor(amount: Money, seconds: number, taxRate: number, discountAmount: Money) {
+    super(amount, seconds, taxRate);
+    this.discountAmount = discountAmount;
+  }
+
+  afterCalculated(fee: Money): Money {
+    return super.afterCalculated(fee).minus(this.discountAmount);
+  }
+}
+
+class RateDiscountableAndTaxableRegularPhone extends RateDiscountableRegularPhone {
+  private taxRate: number = 0;
+
+  constructor(amount: Money, seconds: number, discountAmount: Money, taxRate: number) {
+    super(amount, seconds, discountAmount);
+    this.taxRate = taxRate;
+  }
+
+  afterCalculated(fee: Money): Money {
+    return super.afterCalculated(fee).plus(fee.times(this.taxRate));
+  }
+}
+
+class TaxableAndDiscountableNightlyDiscountPhone extends TaxableNightlyDiscountPhone {
+  private discountAmount: Money = new Money(0);
+
+  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, taxRate: number, discountAmount: Money) {
+    super(nightlyAmount, regularAmount, seconds, taxRate);
+    this.discountAmount = discountAmount;
+  }
+
+  afterCalculated(fee: Money): Money {
+    return super.afterCalculated(fee).minus(this.discountAmount);
+  }
+}
+
+class RateDiscountableAndTaxableNightlyDiscountPhone extends RateDiscountableNightlyDiscountPhone {
+  private taxRate: number = 0;
+
+  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, taxRate: number, discountAmount: Money) {
+    super(nightlyAmount, regularAmount, seconds, discountAmount);
+    this.taxRate = taxRate;
+  }
+
+  afterCalculated(fee: Money): Money {
+    return super.afterCalculated(fee).plus(fee.times(this.taxRate));
+  }
+}
