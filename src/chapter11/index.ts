@@ -162,3 +162,58 @@ class RateDiscountableAndTaxableNightlyDiscountPhone extends RateDiscountableNig
     return super.afterCalculated(fee).plus(fee.times(this.taxRate));
   }
 }
+
+interface RatePolicy {
+  calculateFee(phone: Phone): Money;
+}
+
+abstract class BasicRatePolicy implements RatePolicy {
+  calculateFee(phone: Phone): Money {
+    let result = new Money(0);
+    let call: Call[] = phone.calls;
+
+    call.map((call: Call) => result.plus(this.calculateCallFee(call)));
+
+    return result;
+  }
+
+  abstract calculateCallFee(call: Call): Money;
+}
+
+class RegularPolicy extends BasicRatePolicy {
+  private amount: Money = new Money(0);
+  private seconds: number = 0;
+
+  constructor(amount: Money, seconds: number) {
+    super();
+    this.amount = amount;
+    this.seconds = seconds;
+  }
+
+  calculateCallFee(call: Call): Money {
+    return this.amount.times(call.getDuration() / this.seconds);
+  }
+}
+
+class NightlyDiscountPolicy extends BasicRatePolicy {
+  private static LATE_NIGHT_HOUR: number = 22;
+
+  private nightlyAmount: Money = new Money(0);
+  private regularAmount: Money = new Money(0);
+  private seconds: number = 0;
+
+  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number){
+    super();
+    this.nightlyAmount = nightlyAmount;
+    this.regularAmount = regularAmount;
+    this.seconds = seconds;
+  }
+
+  calculateCallFee(call: Call): Money {
+    if(call.getFrom().getHours() >= NightlyDiscountPolicy.LATE_NIGHT_HOUR) {
+      return this.nightlyAmount.times(call.getDuration() / this.seconds)
+    }
+
+    return this.regularAmount.times(call.getDuration() / this.seconds);
+  }
+}
