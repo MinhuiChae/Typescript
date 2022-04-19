@@ -51,7 +51,6 @@ class GradeLecture extends Lecture {
     super(name, pass, scores);
     this.grades = grades;
   }
-
 }
 
 class Grade {
