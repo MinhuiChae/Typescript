@@ -1,31 +1,24 @@
 import { Call, Money } from "../chapter10";
 
-abstract class Phone {
+ class Phone {
+  private ratePolicy: RatePolicy | null = null;
   calls: Call[] = new Array();
 
-  calculateFee(): Money {
-    let result: Money = new Money(0);
-
-    if(this.calls?.map((call:Call) => result.plus(this.calculateCallFee(call)))) {
-      return result;
-    } else {
-      return this.afterCalculated(result);
-    }
+  constructor(ratePolicy: RatePolicy) {
+    this.ratePolicy = ratePolicy;
   }
 
-  afterCalculated(fee: Money) {
-    return fee;
+  calculateFee(): Money | undefined {
+    return this.ratePolicy?.calculateFee(this);
   }
-
-  abstract calculateCallFee(call: Call): Money;
 }
 
 class RegularPhone extends Phone {
   private amount: Money = new Money(0);
   private seconds: number = 0;
 
-  constructor(amount: Money, seconds: number) {
-    super();
+  constructor(amount: Money, seconds: number, ratePolicy: RatePolicy) {
+    super(ratePolicy);
     this.amount = amount;
     this.seconds = seconds;
   }
@@ -42,8 +35,8 @@ class NightlyDiscountPhone extends Phone {
   private regularAmount: Money = new Money(0);
   private seconds: number = 0;
 
-  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number) {
-    super();
+  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, ratePolicy: RatePolicy) {
+    super(ratePolicy);
     this.nightlyAmount = nightlyAmount;
     this.regularAmount = regularAmount;
     this.seconds = seconds;
@@ -62,8 +55,8 @@ class NightlyDiscountPhone extends Phone {
 class TaxableRegularPhone extends RegularPhone {
   private taxRate: number = 0;
 
-  constructor(amount: Money, seconds: number, taxRate: number) {
-    super(amount, seconds);
+  constructor(amount: Money, seconds: number, taxRate: number, ratePolicy: RatePolicy) {
+    super(amount, seconds, ratePolicy);
     this.taxRate = taxRate;
   }
 
@@ -75,8 +68,8 @@ class TaxableRegularPhone extends RegularPhone {
 class TaxableNightlyDiscountPhone extends NightlyDiscountPhone {
   private taxRate: number = 0;
 
-  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, taxRate: number) {
-    super(nightlyAmount, regularAmount, seconds);
+  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, taxRate: number, ratePolicy: RatePolicy) {
+    super(nightlyAmount, regularAmount, seconds, ratePolicy);
     this.taxRate = taxRate;
   }
 
@@ -88,8 +81,8 @@ class TaxableNightlyDiscountPhone extends NightlyDiscountPhone {
 class RateDiscountableRegularPhone extends RegularPhone {
   private discountAmount: Money = new Money(0);
 
-  constructor(amount: Money, seconds: number, discountAmount: Money) {
-    super(amount, seconds);
+  constructor(amount: Money, seconds: number, discountAmount: Money, ratePolicy: RatePolicy) {
+    super(amount, seconds, ratePolicy);
     this.discountAmount = discountAmount;
   }
 
@@ -101,8 +94,8 @@ class RateDiscountableRegularPhone extends RegularPhone {
 class RateDiscountableNightlyDiscountPhone extends NightlyDiscountPhone {
   private discountAmount: Money = new Money(0);
 
-  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, discountAmount: Money) {
-    super(nightlyAmount, regularAmount, seconds);
+  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, discountAmount: Money, ratePolicy: RatePolicy) {
+    super(nightlyAmount, regularAmount, seconds, ratePolicy);
     this.discountAmount = discountAmount;
   }
 
@@ -114,8 +107,8 @@ class RateDiscountableNightlyDiscountPhone extends NightlyDiscountPhone {
 class TaxableAndRateDiscountableRegularPhone extends TaxableRegularPhone {
   private discountAmount: Money = new Money(0);
 
-  constructor(amount: Money, seconds: number, taxRate: number, discountAmount: Money) {
-    super(amount, seconds, taxRate);
+  constructor(amount: Money, seconds: number, taxRate: number, discountAmount: Money, ratePolicy: RatePolicy) {
+    super(amount, seconds, taxRate, ratePolicy);
     this.discountAmount = discountAmount;
   }
 
@@ -127,8 +120,8 @@ class TaxableAndRateDiscountableRegularPhone extends TaxableRegularPhone {
 class RateDiscountableAndTaxableRegularPhone extends RateDiscountableRegularPhone {
   private taxRate: number = 0;
 
-  constructor(amount: Money, seconds: number, discountAmount: Money, taxRate: number) {
-    super(amount, seconds, discountAmount);
+  constructor(amount: Money, seconds: number, discountAmount: Money, taxRate: number, ratePolicy: RatePolicy) {
+    super(amount, seconds, discountAmount, ratePolicy);
     this.taxRate = taxRate;
   }
 
@@ -140,8 +133,8 @@ class RateDiscountableAndTaxableRegularPhone extends RateDiscountableRegularPhon
 class TaxableAndDiscountableNightlyDiscountPhone extends TaxableNightlyDiscountPhone {
   private discountAmount: Money = new Money(0);
 
-  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, taxRate: number, discountAmount: Money) {
-    super(nightlyAmount, regularAmount, seconds, taxRate);
+  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, taxRate: number, discountAmount: Money, ratePolicy: RatePolicy) {
+    super(nightlyAmount, regularAmount, seconds, taxRate, ratePolicy);
     this.discountAmount = discountAmount;
   }
 
@@ -153,8 +146,8 @@ class TaxableAndDiscountableNightlyDiscountPhone extends TaxableNightlyDiscountP
 class RateDiscountableAndTaxableNightlyDiscountPhone extends RateDiscountableNightlyDiscountPhone {
   private taxRate: number = 0;
 
-  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, taxRate: number, discountAmount: Money) {
-    super(nightlyAmount, regularAmount, seconds, discountAmount);
+  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, taxRate: number, discountAmount: Money, ratePolicy: RatePolicy) {
+    super(nightlyAmount, regularAmount, seconds, discountAmount, ratePolicy);
     this.taxRate = taxRate;
   }
 
