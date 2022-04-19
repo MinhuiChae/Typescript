@@ -67,8 +67,48 @@ class TaxableRegularPhone extends RegularPhone {
     this.taxRate = taxRate;
   }
 
-  calculateFee(): Money {
-    let fee = super.calculateFee();
+  afterCalculated(fee: Money): Money {
     return fee.plus(fee.times(this.taxRate));
   }
 }
+
+class TaxableNightlyDiscountPhone extends NightlyDiscountPhone {
+  private taxRate: number = 0;
+
+  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, taxRate: number) {
+    super(nightlyAmount, regularAmount, seconds);
+    this.taxRate = taxRate;
+  }
+
+  afterCalculated(fee: Money): Money {
+    return fee.plus(fee.times(this.taxRate));
+  }
+}
+
+class RateDiscountableRegularPhone extends RegularPhone {
+  private discountAmount: Money = new Money(0);
+
+  constructor(amount: Money, seconds: number, discountAmount: Money) {
+    super(amount, seconds);
+    this.discountAmount = discountAmount;
+  }
+
+  afterCalculated(fee: Money): Money {
+    return fee.minus(this.discountAmount)
+  }
+}
+
+class RateDiscountableNightlyDiscountPhone extends NightlyDiscountPhone {
+  private discountAmount: Money = new Money(0);
+
+  constructor(nightlyAmount: Money, regularAmount: Money, seconds: number, discountAmount: Money) {
+    super(nightlyAmount, regularAmount, seconds);
+    this.discountAmount = discountAmount;
+  }
+
+  afterCalculated(fee: Money): Money {
+    return fee.minus(this.discountAmount);
+  }
+}
+
+
