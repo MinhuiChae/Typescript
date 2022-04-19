@@ -210,3 +210,48 @@ class NightlyDiscountPolicy extends BasicRatePolicy {
     return this.regularAmount.times(call.getDuration() / this.seconds);
   }
 }
+
+abstract class AdditionalRatePolicy implements RatePolicy {
+  private next: RatePolicy | null = null;
+
+  constructor(next: RatePolicy) {
+    this.next = next;
+  }
+
+  calculateFee(phone: Phone): Money {
+    if(this.next) {
+      let fee = this.next.calculateFee(phone);
+      return this.afterCalculated(fee);
+    } return new Money(0);
+  }
+
+  abstract afterCalculated(fee: Money): Money;
+}
+
+class TaxablePolicy extends AdditionalRatePolicy {
+  private taxRatio: number = 0;
+
+  constructor(taxRatio: number, next: RatePolicy) {
+    super(next);
+    this.taxRatio = taxRatio;
+  }
+
+  afterCalculated(fee: Money): Money {
+    return fee.plus(fee.times(this.taxRatio));
+  }
+}
+
+class RateDiscountablePolicy extends AdditionalRatePolicy {
+  private discoutAmount: Money = new Money(0);
+
+  constructor(discountAmount: Money, next: RatePolicy) {
+    super(next);
+    this.discoutAmount = discountAmount;
+  }
+
+  afterCalculated(fee: Money): Money {
+    return fee.minus(this.discoutAmount);
+  }
+}
+
+export {Phone, RegularPhone, NightlyDiscountPhone, RateDiscountablePolicy, TaxableRegularPhone, TaxableNightlyDiscountPhone, RateDiscountableRegularPhone, RateDiscountableNightlyDiscountPhone, TaxableAndRateDiscountableRegularPhone, RateDiscountableAndTaxableRegularPhone, TaxableAndDiscountableNightlyDiscountPhone, RateDiscountableAndTaxableNightlyDiscountPhone, RegularPolicy, NightlyDiscountPolicy};
