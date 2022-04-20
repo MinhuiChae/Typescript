@@ -14,4 +14,4 @@ class TaxablePolicy extends AdditionalRatePolicy {
   }
 }
 
-export default AdditionalRatePolicy;
+export default TaxablePolicy;
