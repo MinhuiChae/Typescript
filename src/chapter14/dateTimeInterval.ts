@@ -12,7 +12,17 @@ class DateTimeInterval {
   }
   
   static toMidnight(from: Date): DateTimeInterval {
-    return new DateTimeInterval(from, new Date(23, 59, 59, 999_999_999));
+    const year = from.getFullYear();
+    const month = from.getMonth();
+    const day = from.getDate();
+    return new DateTimeInterval(from, new Date(year, month, day, 23, 59, 59));
+  }
+
+  static fromMidnight(to: Date): DateTimeInterval {
+    const year = to.getFullYear();
+    const month = to.getMonth();
+    const day = to.getDate();
+    return new DateTimeInterval(new Date(year, month, day), to);
   }
 
   static during(from: Date, to: Date): DateTimeInterval {
@@ -20,13 +30,9 @@ class DateTimeInterval {
   }
 
   duration(): number {
-    let toMinute = this.to?.getTime();
-    let fromMinute = this.from?.getTime();
-
-    if(toMinute && fromMinute) {
-      return (toMinute - fromMinute)/1000;
-    }
-    return 0;
+    if(this.from && this.to) {
+      return (this.from.getDate() - this.to.getDate()-1);
+    } return 0;
   }
 
   getFrom(): Date {

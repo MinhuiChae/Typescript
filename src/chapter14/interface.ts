@@ -1,4 +1,5 @@
-import { Call, Money } from "../chapter10";
+import {Money } from "../chapter10";
+import Call from '../chapter10/call';
 import Phone from './phone';
 
 interface RatePolicy {
