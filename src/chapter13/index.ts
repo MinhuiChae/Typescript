@@ -46,3 +46,4 @@ class Square extends Rectangle {
     super.setHeight(height);
   }
 }
+
