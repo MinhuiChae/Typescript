@@ -16,10 +16,9 @@ class NightlyDiscountPolicy extends BasicRatePolicy {
 
   calculateCallFee(call: Call): Money {
     if(call.getFrom().getHours() >= NightlyDiscountPolicy.LATE_NIGHT_HOUR) {
-      return this.nightlyAmount.times(call.getDuration() / this.seconds)
+      return this.nightlyAmount.times(Math.ceil(call.getDuration() / this.seconds))
     }
-
-    return this.regularAmount.times(call.getDuration() / this.seconds);
+    return this.regularAmount.times(Math.ceil(call.getDuration() / this.seconds));
   }
 }
 

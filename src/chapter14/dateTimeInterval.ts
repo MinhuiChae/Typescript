@@ -25,16 +25,6 @@ class DateTimeInterval {
     return new DateTimeInterval(new Date(year, month, day), to);
   }
 
-  static during(from: Date, to: Date): DateTimeInterval {
-    return new DateTimeInterval(from, to);
-  }
-
-  duration(): number {
-    if(this.from && this.to) {
-      return (this.from.getDate() - this.to.getDate()-1);
-    } return 0;
-  }
-
   getFrom(): Date {
     if(this.from) {
       return this.from;

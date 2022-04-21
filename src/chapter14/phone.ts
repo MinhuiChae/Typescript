@@ -14,4 +14,4 @@ class Phone {
   }
 }
 
-export default Phone;
+export {Phone, Money};

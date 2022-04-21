@@ -219,8 +219,8 @@ class Money {
     return this.amount / (other.amount) >= 0;
   }
   
-  plusMoney(money: Money) {
-    this.amount  +=  money.amount;
+  plusMoney(money: Money): Money {
+    return new Money(this.amount  +=  money.amount);
   }
 
   number(): number {
