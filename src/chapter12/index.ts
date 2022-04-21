@@ -1,4 +1,3 @@
-import { floor } from "lodash";
 
 class Lecture {
   private pass: number = 0;

@@ -1,6 +1,6 @@
 import {Call} from "../chapter10";
-import  NightlyDiscountPolicy from "./nightlyDiscountPolicy";
-import {Money } from "./basicRatePolicy";
+import NightlyDiscountPolicy from "./nightlyDiscountPolicy";
+import {Money} from "./basicRatePolicy";
 import DateTimeInterval from "./dateTimeInterval";
 
 class TimeOfDayDiscountCall extends NightlyDiscountPolicy {
