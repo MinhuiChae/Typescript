@@ -1,11 +1,33 @@
-function solution2(n: number, lost: number[], reserve: number[]) {
-  return n - lost.filter(a => {
-    const b = reserve.find(r => Math.abs(r-a) <= 1)
-    if(!b) return true
-    reserve = reserve.filter(r => r !== b)
-}).length
+function solution(arr: number[]) {
+  let min: number = 0;
+  if(arr.length === 1) {
+    arr.shift();
+    arr.push(-1)
+    return arr;
+  } else {
+
+      min = math(arr[0], arr[1]);
+      
+      for(let i =2; i< arr.length; i++) {
+        if(math(min, arr[i]) === arr[i]) {
+          min = arr[i];
+        }
+      }
+
+      console.log(min);
+      console.log(arr);
+
+    const minIndex = arr.findIndex((a) => a === min);
+    arr.splice(minIndex, 1);
+    return arr;
+  }
+}
+
+function math(a: number, b: number) {
+  if(a<b) return a;
+  else return b;
 }
 
 
+console.log(solution([8,4,9,7]));
 
-console.log(solution2(5, [2,4], [1, 3, 5]));
